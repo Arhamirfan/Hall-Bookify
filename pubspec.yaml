@@ -1,0 +1,50 @@
+name: hall_bookify
+description: A new Flutter project for FYP.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+  international_phone_input: ^1.0.4
+  pinput: ^1.2.2
+  provider: ^6.0.0
+  http: ^0.13.3
+  flutter_svg: ^0.18.0
+  firebase_auth: ^3.0.2
+  firebase_core: ^1.6.0
+  cloud_firestore: ^2.5.1
+  flutter_facebook_auth: ^3.5.1
+  flutter_facebook_login: ^3.0.0
+  font_awesome_flutter: ^9.1.0
+  google_sign_in: ^5.0.7
+  google_maps_flutter: ^2.0.8
+  geolocator: ^8.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+  #   - images/a_dot_ham.jpeg
+  fonts:
+    - family: Gudea
+      fonts:
+        - asset: assets/fonts/gudeaRegular.ttf
+        - asset: assets/fonts/gudeaBold.ttf
+

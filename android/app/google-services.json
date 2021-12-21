@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "836625590752",
+    "project_id": "hall-bookify",
+    "storage_bucket": "hall-bookify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836625590752:android:097de833e348713886a385",
+        "android_client_info": {
+          "package_name": "com.hallbookify.hall_bookify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836625590752-ajcdsg2jmsmrp1mtjotsjjrkgbouvrhf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hallbookify.hall_bookify",
+            "certificate_hash": "9a4ccc26fcd440edf182c10ba048a134393ae62d"
+          }
+        },
+        {
+          "client_id": "836625590752-ef6b05mtc74htsf2sllpa2035se90nt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlTEZrpEK3sealX4dh3pNGuRUd3ZkFzlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836625590752-ef6b05mtc74htsf2sllpa2035se90nt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

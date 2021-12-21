@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hall Bookify</string>
+<!--    <string name="facebook_app_id">896760087486347</string>-->
+<!--    <string name="fb_login_protocol_scheme">fb896760087486347</string>-->
+    <string name="facebook_app_id">587295762373401</string>
+    <string name="fb_login_protocol_scheme">fb587295762373401</string>
+
+
+
+</resources>
