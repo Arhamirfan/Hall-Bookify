@@ -102,7 +102,7 @@ class registerPhone extends StatelessWidget {
                                     phoneno: phoneNumber);
                               },
                             ));
-                            print('goto next screen and verify phone no');
+                            print('Verifying phone no ..');
                           }
                         },
                       ),

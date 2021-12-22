@@ -4,6 +4,7 @@ import 'package:hall_bookify/Controller/loginButtons.dart';
 import 'package:hall_bookify/Models/FirebaseService.dart';
 import 'package:hall_bookify/Models/phoneAuth.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Constants.dart';
 import 'ageConfirmation.dart';
@@ -123,7 +124,14 @@ class nameRegistration extends StatelessWidget {
                           print(first);
                           print(last);
                           DatabaseService(uid: userID)
-                              .registerOrUpdateData2(first, last, phoneNumber);
+                              .registerOrUpdateData2(first, last, phoneNumber)
+                              .then((value) async {
+                            SharedPreferences sharedpreference =
+                                await SharedPreferences.getInstance();
+                            sharedpreference.setString("PHONE", phoneNumber);
+                            print("Successfully saved Shared Preference");
+                          });
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(

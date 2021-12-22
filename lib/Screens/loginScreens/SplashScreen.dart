@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'getStartedScreen.dart';
+
+String savedPhoneData = "";
 
 class SplashScreen extends StatefulWidget {
   static const String id = 'SplashScreen';
@@ -16,10 +20,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => getStartedScreen()),
-      );
+    getValidationData().whenComplete(() {
+      Timer(Duration(seconds: 3), () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) =>
+                savedPhoneData == "" ? getStartedScreen() : MainMenu()));
+      });
+    });
+  }
+
+  Future getValidationData() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    var obtainedPhoneNumber = sharedPreferences.getString("PHONE");
+    setState(() {
+      savedPhoneData = obtainedPhoneNumber!;
     });
   }
 

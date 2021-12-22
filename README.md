@@ -19,3 +19,7 @@ A new Flutter project for FYP.
  description=The project hall-bookify does not exist or it does not contain an active Cloud Datastore or Cloud Firestore database.
   Please visit http://console.cloud.google.com to create a project or https://console.cloud.google.com/datastore/setup?project=hall-bookify to add a Cloud Datastore
   or Cloud Firestore database. Note that Cloud Datastore or Cloud Firestore always have an associated App Engine app and this app must not be disabled., cause=null}. -->
+
+<!--   To solve: -->
+<!-- devtools-2.9.2\build" could not be found -->
+<!-- Null check operator used on a null value -->
