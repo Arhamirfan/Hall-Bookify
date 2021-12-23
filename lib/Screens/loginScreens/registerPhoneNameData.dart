@@ -178,7 +178,7 @@ class nameRegistration extends StatelessWidget {
                     .registerNames(value);
               },
               decoration: InputDecoration(
-                hintText: '12/A Faisal Town',
+                hintText: '123/A Faisal Town',
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 ),
