@@ -24,7 +24,7 @@ class _phoneOTPverificationState extends State<phoneOTPverification> {
   String _verificationCode = "";
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
-  int _start = 60;
+  int _start = 90;
   late Timer _timer;
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -75,7 +75,7 @@ class _phoneOTPverificationState extends State<phoneOTPverification> {
             _verificationCode = verificationId;
           });
         },
-        timeout: Duration(seconds: 60));
+        timeout: Duration(seconds: 90));
   }
 
   @override

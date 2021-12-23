@@ -28,9 +28,9 @@ class getnames extends ChangeNotifier {
     agerememberMe = newValue;
 
     if (agerememberMe) {
-      // TODO: Here goes your functionality that remembers the user.
+      //  Here goes your functionality that remembers the user.
     } else {
-      // TODO: Forget the user
+      // Forget the user
     }
     notifyListeners();
     // });
