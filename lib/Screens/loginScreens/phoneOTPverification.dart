@@ -149,11 +149,12 @@ class _phoneOTPverificationState extends State<phoneOTPverification> {
                                       smsCode: pin))
                               .then((value) async {
                             if (value.user != null) {
-                              print('logged in manually, can proceed to home');
+                              print(
+                                  'Phone validation confirmed. Checking User Existance..');
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => nameRegistration(
+                                    builder: (context) => AccountVerification(
                                       phoneNumber: widget.phoneno,
                                     ),
                                   ),

@@ -24,4 +24,21 @@ A new Flutter project for FYP.
 <!-- devtools-2.9.2\build" could not be found -->
 <!-- Sol: dart pub global activate devtools -v 2.8.0 -->
 
-<!-- Null check operator used on a null value -->
+<!-- The following NoSuchMethodError was thrown while dispatching notifications for TextEditingController: -->
+<!-- The getter 'code' was called on null. -->
+<!-- Receiver: null -->
+<!-- Tried calling: code -->
+
+<!-- This error happens if you call setState() on a State object for a widget that no longer appears in the widget tree (e.g., whose parent widget no longer includes the widget in its build). This error can occur when code calls setState() from a timer or an animation callback. -->
+<!-- E/flutter (19922): The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in the tree. -->
+<!-- E/flutter (19922): This error might indicate a memory leak if setState() is being called because another object is retaining a reference to this State object after it has been removed from the tree. To avoid memory leaks, consider breaking the reference to this object during dispose(). -->
+<!-- at: (package:hall_bookify/Screens/loginScreens/phoneOTPverification.dart:74:11) -->
+
+<!-- Unhandled Exception: Bad state: cannot get a field on a DocumentSnapshotPlatform which does not exist -->
+<!-- at:  (package:hall_bookify/Screens/loginScreens/registerPhoneNameData.dart:39:22) -->
+
+<!-- setstate called after dispose -->
+<!-- This error happens if you call setState() on a State object for a widget that no longer appears in the widget tree (e.g., whose parent widget no longer includes the widget in its build). This error can occur when code calls setState() from a timer or an animation callback. -->
+<!-- E/flutter (19922): The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in the tree. -->
+<!-- E/flutter (19922): This error might indicate a memory leak if setState() is being called because another object is retaining a reference to this State object after it has been removed from the tree. To avoid memory leaks, consider breaking the reference to this object during dispose(). -->
+<!-- at: (package:hall_bookify/Screens/loginScreens/phoneOTPverification.dart:74:11) -->

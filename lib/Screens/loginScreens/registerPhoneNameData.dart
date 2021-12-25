@@ -1,13 +1,77 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hall_bookify/Controller/loginButtons.dart';
+import 'package:hall_bookify/Models/DatabaseManager.dart';
 import 'package:hall_bookify/Models/FirebaseService.dart';
 import 'package:hall_bookify/Models/phoneAuth.dart';
+import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Constants.dart';
 import 'ageConfirmation.dart';
+
+class AccountVerification extends StatefulWidget {
+  AccountVerification({required this.phoneNumber});
+  static const String id = 'AccountVerification';
+  final String phoneNumber;
+
+  @override
+  _AccountVerificationState createState() => _AccountVerificationState();
+}
+
+class _AccountVerificationState extends State<AccountVerification> {
+  bool isUserAvailable = false;
+  var userID = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList().whenComplete(() {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => isUserAvailable == false
+              ? nameRegistration(phoneNumber: widget.phoneNumber)
+              : MainMenu()));
+    });
+  }
+
+  Future fetchDatabaseList() async {
+    bool resultant = await DatabaseManager().userExist(userID);
+    if (resultant == true) {
+      setState(() {
+        isUserAvailable = true;
+      });
+    } else {
+      setState(() {
+        isUserAvailable = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+      color: Color(0xffffffff),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Checking User Existance ...',
+              style: TextStyle(fontSize: 20),
+              maxLines: 1,
+            ),
+            CircularProgressIndicator(
+              color: Colors.purpleAccent,
+            )
+          ],
+        ),
+      ),
+    ));
+  }
+}
 
 class nameRegistration extends StatelessWidget {
   nameRegistration({required this.phoneNumber});
@@ -15,7 +79,7 @@ class nameRegistration extends StatelessWidget {
   String first = "", last = "", address = "", city = "", cnic = "";
   final String phoneNumber;
   var userID = FirebaseAuth.instance.currentUser!.uid;
-  late final Function oncontextChanged;
+  //late final Function oncontextChanged;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -226,6 +290,10 @@ class nameRegistration extends StatelessWidget {
                 cnic = Provider.of<getnames>(context, listen: false)
                     .registerNames(value);
               },
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               decoration: InputDecoration(
                 hintText: 'XXXXX-XXXXXXX-X',
                 enabledBorder: UnderlineInputBorder(
