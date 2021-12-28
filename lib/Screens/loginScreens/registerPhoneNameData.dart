@@ -28,7 +28,12 @@ class _AccountVerificationState extends State<AccountVerification> {
   @override
   void initState() {
     super.initState();
-    fetchDatabaseList().whenComplete(() {
+    fetchDatabaseList().whenComplete(() async {
+      //TODO: if going to main menu then add shared preference before going to main menu
+      SharedPreferences sharedpreference =
+          await SharedPreferences.getInstance();
+      sharedpreference.setString("PHONE", widget.phoneNumber);
+      print("Successfully saved PhoneShared Preference before validation");
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => isUserAvailable == false
               ? nameRegistration(phoneNumber: widget.phoneNumber)
@@ -156,10 +161,10 @@ class nameRegistration extends StatelessWidget {
                               .registerOrUpdateData2(first, last, phoneNumber,
                                   address, city, cnic, userID)
                               .then((value) async {
-                            SharedPreferences sharedpreference =
-                                await SharedPreferences.getInstance();
-                            sharedpreference.setString("PHONE", phoneNumber);
-                            print("Successfully saved PhoneShared Preference");
+                            // SharedPreferences sharedpreference =
+                            //     await SharedPreferences.getInstance();
+                            // sharedpreference.setString("PHONE", phoneNumber);
+                            // print("Successfully saved PhoneShared Preference");
                           });
 
                           Navigator.push(

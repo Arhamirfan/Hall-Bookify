@@ -1,11 +1,14 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Controller/MainDrawer.dart';
-import 'package:hall_bookify/Controller/loginButtons.dart';
 import 'package:hall_bookify/Models/DatabaseManager.dart';
-import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
-import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hall_bookify/Screens/HomeScreen/HomePage.dart';
+import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
+import 'package:hall_bookify/Screens/mainScreens/SearchProduct/searchProductMain.dart';
+import 'package:hall_bookify/Screens/mainScreens/addProducts/addProductMain.dart';
+import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';
@@ -16,7 +19,9 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final NavigationKey = GlobalKey<CurvedNavigationBarState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  int index = 0;
   String uid = "",
       firstname = "",
       lastname = "",
@@ -25,10 +30,24 @@ class _MainMenuState extends State<MainMenu> {
       city = "",
       cnic = "";
   List userProfileList = [];
+  late var screens;
   @override
   void initState() {
     fetchUserInfo();
     super.initState();
+    screens = [
+      HomePage(),
+      SearchProduct(),
+      AddProduct(),
+      Favourite(),
+      ProfileManagement(
+          firstname: firstname,
+          lastname: lastname,
+          phoneno: phoneno,
+          address: address,
+          city: city,
+          uid: uid)
+    ];
   }
 
   fetchUserInfo() async {
@@ -62,7 +81,6 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    print(" It is also working...");
     return Scaffold(
       key: _key,
       resizeToAvoidBottomInset: false,
@@ -98,45 +116,29 @@ class _MainMenuState extends State<MainMenu> {
               ))
         ],
       ),
-      body: Container(
-        color: Color(0xffffffff),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'This is the Main Menu Page',
-              style: TextStyle(fontSize: 25),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Flexible(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 10.0, left: 25, right: 25),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * .08,
-                  width: MediaQuery.of(context).size.width,
-                  child: loginButton(
-                      buttontext: 'LOGOUT',
-                      buttonColour: Colors.black,
-                      buttontextColour: Colors.white,
-                      onpressed: () async {
-                        final SharedPreferences sharedpreference =
-                            await SharedPreferences.getInstance();
-                        sharedpreference.remove('PHONE');
-                        //TODO: also apply check for facebook and google login
-                        Navigator.popUntil(
-                            context, ModalRoute.withName(SplashScreen.id));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => getStartedScreen()));
-                      }),
-                ),
-              ),
-            )
-          ],
+      body: screens[index],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context)
+            .copyWith(iconTheme: IconThemeData(color: Colors.white)),
+        child: CurvedNavigationBar(
+          key: NavigationKey,
+          height: 60,
+          color: Colors.purpleAccent,
+          backgroundColor: Colors.transparent,
+          items: bottomNavItems,
+          index: index,
+          onTap: (value) {
+            setState(() {
+              this.index = value;
+              //navigate by button to go to pages of curved navigation bar
+              //onPressed(){
+              //nav key defined at top
+              //final NavigationKey = GlobalKey<CurvedNavigationBarState>();
+              //final navigationState = navigationKey.currentState!;
+              //navigationState = setPage(0);
+              //}
+            });
+          },
         ),
       ),
     );

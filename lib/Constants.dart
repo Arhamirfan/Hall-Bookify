@@ -57,6 +57,14 @@ var smagePrivacyChecker = new RichText(
   ),
 );
 
+final bottomNavItems = [
+  Icon(Icons.home, size: 30),
+  Icon(Icons.search, size: 30),
+  Icon(Icons.add, size: 30),
+  Icon(Icons.favorite, size: 30),
+  Icon(Icons.person, size: 30)
+];
+
 const ksmallText = TextStyle(fontSize: 10);
 const kmediumText = TextStyle(fontSize: 15);
 const klargeText = TextStyle(fontSize: 20);

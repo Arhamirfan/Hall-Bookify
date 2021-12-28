@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hall_bookify/Controller/textFieldInput.dart';
 import 'package:hall_bookify/Models/DatabaseManager.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
@@ -43,39 +44,19 @@ class ProfileManagement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.purple,
-            )),
-        actions: [
-          IconButton(
-              onPressed: () {
-                deleteData(uid);
-                openDialogBox(
-                    context,
-                    'Profile Delete',
-                    'Successfully deleted profile.',
-                    () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => getStartedScreen(),
-                        ),
-                        (route) => false));
-                print("Profile Deleted");
-              },
-              icon: Icon(
-                Icons.delete_rounded,
-                color: Colors.purple,
-              ))
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   elevation: 1,
+      //   leading: IconButton(
+      //       onPressed: () {
+      //         Navigator.pop(context);
+      //       },
+      //       icon: Icon(
+      //         Icons.arrow_back,
+      //         color: Colors.purple,
+      //       )),
+      //   actions: [],
+      // ),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
@@ -84,9 +65,33 @@ class ProfileManagement extends StatelessWidget {
           },
           child: ListView(
             children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Edit Profile",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        deleteData(uid);
+                        openDialogBox(
+                            context,
+                            'Profile Delete',
+                            'Successfully deleted profile.',
+                            () => Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => getStartedScreen(),
+                                ),
+                                (route) => false));
+                        print("Profile Deleted");
+                      },
+                      icon: Icon(
+                        Icons.delete_rounded,
+                        color: Colors.purple,
+                      ))
+                ],
               ),
               SizedBox(
                 height: 15,
@@ -186,26 +191,6 @@ class ProfileManagement extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildTextField(
-      String labelText, String hintText, TextEditingController controler) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0),
-      child: TextField(
-        controller: controler,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
       ),
     );
   }
