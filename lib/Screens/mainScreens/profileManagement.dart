@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/textFieldInput.dart';
-import 'package:hall_bookify/Models/DatabaseManager.dart';
+import 'package:hall_bookify/Models/ProfileDatabase.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
 import 'package:shared_preferences/shared_preferences.dart';

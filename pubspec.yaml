@@ -32,6 +32,11 @@ dependencies:
   google_maps_flutter: ^2.0.8
   geolocator: ^8.0.0
   shared_preferences: ^2.0.7
+  image_picker: ^0.8.3+3
+  firebase_storage: ^10.2.4
+  transparent_image: ^2.0.0
+
+
 
 dev_dependencies:
   flutter_test:

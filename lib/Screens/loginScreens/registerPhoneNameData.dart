@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hall_bookify/Controller/loginButtons.dart';
-import 'package:hall_bookify/Models/DatabaseManager.dart';
-import 'package:hall_bookify/Models/FirebaseService.dart';
+import 'package:hall_bookify/Models/DatabaseCollections.dart';
+import 'package:hall_bookify/Models/ProfileDatabase.dart';
 import 'package:hall_bookify/Models/phoneAuth.dart';
 import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
 import 'package:provider/provider.dart';
@@ -158,7 +158,7 @@ class nameRegistration extends StatelessWidget {
                           print(city);
                           print(cnic);
                           DatabaseService(uid: userID)
-                              .registerOrUpdateData2(first, last, phoneNumber,
+                              .registerCustomer(first, last, phoneNumber,
                                   address, city, cnic, userID)
                               .then((value) async {
                             // SharedPreferences sharedpreference =
@@ -291,6 +291,7 @@ class nameRegistration extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: TextField(
+              maxLength: 13,
               onChanged: (value) {
                 cnic = Provider.of<getnames>(context, listen: false)
                     .registerNames(value);

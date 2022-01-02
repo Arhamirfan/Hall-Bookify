@@ -92,9 +92,19 @@ const kxlblackText = TextStyle(color: Colors.black, fontSize: 30);
 const kxxlblackText = TextStyle(color: Colors.black, fontSize: 40);
 const kxxxlblackText = TextStyle(color: Colors.black, fontSize: 50);
 
+const ksmallgreyText = TextStyle(color: Colors.black54, fontSize: 12);
 const kmediumgreyText = TextStyle(color: Colors.grey, fontSize: 15);
 const klargegreyText = TextStyle(color: Colors.grey, fontSize: 20);
 
 const klargeblueText =
     TextStyle(color: Colors.blue, fontSize: 20, fontWeight: FontWeight.bold);
 const kmlblueText = TextStyle(color: Colors.blue, fontSize: 25);
+
+const ksmallpurpleText = TextStyle(color: Colors.purple, fontSize: 10);
+const kmediumpurpleText = TextStyle(color: Colors.purple, fontSize: 15);
+const klargepurpleText = TextStyle(color: Colors.purple, fontSize: 20);
+const klargepurpleboldText =
+    TextStyle(color: Colors.purple, fontSize: 20, fontWeight: FontWeight.bold);
+const kmlpurpleText = TextStyle(color: Colors.purple, fontSize: 25);
+const kmlpurpleboldText =
+    TextStyle(color: Colors.purple, fontSize: 25, fontWeight: FontWeight.bold);

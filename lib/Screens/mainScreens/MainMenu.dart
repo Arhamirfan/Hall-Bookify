@@ -3,12 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Controller/MainDrawer.dart';
-import 'package:hall_bookify/Models/DatabaseManager.dart';
-import 'package:hall_bookify/Screens/HomeScreen/HomePage.dart';
+import 'package:hall_bookify/Models/ProfileDatabase.dart';
 import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
 import 'package:hall_bookify/Screens/mainScreens/SearchProduct/searchProductMain.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addProductMain.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
+
+import 'HomeScreen/HomePage.dart';
 
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';

@@ -165,6 +165,7 @@ class MainDrawer extends StatelessWidget {
                             final SharedPreferences sharedpreference =
                                 await SharedPreferences.getInstance();
                             sharedpreference.remove('PHONE');
+
                             Navigator.popUntil(
                                 context, ModalRoute.withName(SplashScreen.id));
                             Navigator.push(
