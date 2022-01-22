@@ -42,3 +42,20 @@ A new Flutter project for FYP.
 <!-- E/flutter (19922): The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in the tree. -->
 <!-- E/flutter (19922): This error might indicate a memory leak if setState() is being called because another object is retaining a reference to this State object after it has been removed from the tree. To avoid memory leaks, consider breaking the reference to this object during dispose(). -->
 <!-- at: (package:hall_bookify/Screens/loginScreens/phoneOTPverification.dart:74:11) -->
+
+
+
+
+
+<!-- FireStore: -->
+<!-- Package-> UID-> PID-> uid,p_name,p_desc,p_price,PID (after this provide UID,PID to storage) -->
+<!-- Storage: -->
+<!-- UID->packageID->images[] -->
+
+
+
+
+
+
+
+

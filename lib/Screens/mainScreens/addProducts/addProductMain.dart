@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
+import 'package:hall_bookify/Models/DatabaseCollections.dart';
 import 'package:hall_bookify/Models/Services.dart';
+import 'package:hall_bookify/Models/sharedPreference.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addTaskScreen.dart';
 import 'package:hall_bookify/Widgets/ServicesList.dart';
 
@@ -17,11 +20,47 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   late BuildContext Context;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String uid = "";
+  Set<int> PackageRandomNumber = Set();
+  int packagenumber = 0;
+  sharedPreference sharedpref = new sharedPreference();
+  @override
+  void initState() {
+    getcount();
+    //getCount();
+    //print(packagenumber);
+    //used set for not repeating the random number, used last index element to set the Package Order Number
+    // PackageRandomNumber.add(
+    //     //    Random().nextInt(9999)
+    //     );------------------------------------------here-----------
+    fetchinfo();
+    super.initState();
+  }
 
-  void createSnackBar(String message) {
-    var snackbar = SnackBar(
-        content: Text(message), backgroundColor: Colors.lightBlueAccent);
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  void getcount() async {
+    int packageno = await sharedpref.getintfromSharedPreference();
+    setState(() {
+      packagenumber = packageno;
+    });
+    print('SP count in product main is :' + packagenumber.toString());
+  }
+
+  // Future getCount() async {
+  //   //here you can call the function and handle the output(return value) as result
+  //   sharedpref.getintfromSharedPreference().then((result) {
+  //     // print(result);
+  //     setState(() {
+  //       //handle your result here and update the count.
+  //       //update build here.
+  //       packagenumber = result;
+  //     });
+  //   }); //you can call handleError method show an alert or to try again
+  // }
+
+  fetchinfo() async {
+    final User user = await _auth.currentUser!;
+    uid = user.uid;
   }
 
   @override
@@ -72,9 +111,10 @@ class _AddProductState extends State<AddProduct> {
                                       name: newServiceName,
                                       price: newServicePrice,
                                       description: newServiceDesc,
+                                      packageNumber: packagenumber,
                                       images: imageFileList));
                                 });
-                                createSnackBar(
+                                snackBar(context,
                                     "Service Added. Click to add more to Package");
 //                             var snackBar =
 //                                 SnackBar(content: Text('Service Added'));
@@ -100,10 +140,10 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     RaisedButton(
                       onPressed: () {
-                        createSnackBar("ADD DATA TO FIRE BASE");
+                        snackBar(context, "ADD DATA TO FIRE BASE");
                         // print('package 1');
-                        // print('path of 1st pic: ' +
-                        //     servicesTask[0].images![0].path);
+                        print('path of 1st pic: ' +
+                            servicesTask[0].images![0].path);
                         // print('path of 2nd pic: ' +
                         //     servicesTask[0].images![1].path);
                         //result
@@ -199,7 +239,30 @@ class _AddProductState extends State<AddProduct> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8.0),
                                             child: RaisedButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                print(
+                                                    "length before goin to DB function: " +
+                                                        servicesTask.length
+                                                            .toString());
+                                                int packageno = await sharedpref
+                                                        .getintfromSharedPreference(),
+                                                    packagenotosend = 0;
+                                                setState(() {
+                                                  packagenotosend = packageno;
+                                                });
+                                                DatabaseService(uid: uid)
+                                                    .registerPackages(
+                                                        packagenotosend
+                                                            .toString(),
+                                                        servicesTask);
+                                                Navigator.pop(context);
+                                                getcount();
+                                                setState(() {
+                                                  servicesTask.clear();
+                                                });
+                                                // snackBar(context,
+                                                //     "Successfully added");
+                                              },
                                               color: Colors.purple,
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 20),

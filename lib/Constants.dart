@@ -65,6 +65,12 @@ final bottomNavItems = [
   Icon(Icons.person, size: 30)
 ];
 
+void snackBar(BuildContext context, String message) {
+  var snackbar =
+      SnackBar(content: Text(message), backgroundColor: Colors.lightBlueAccent);
+  ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
 const ksmallText = TextStyle(fontSize: 10);
 const kmediumText = TextStyle(fontSize: 15);
 const klargeText = TextStyle(fontSize: 20);
