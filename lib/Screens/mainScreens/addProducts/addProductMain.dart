@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
+import 'package:hall_bookify/Controller/progressDialog.dart';
 import 'package:hall_bookify/Models/DatabaseCollections.dart';
 import 'package:hall_bookify/Models/Services.dart';
 import 'package:hall_bookify/Models/sharedPreference.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addTaskScreen.dart';
 import 'package:hall_bookify/Widgets/ServicesList.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class AddProduct extends StatefulWidget {
   // TextEditingController _serviceNameController = TextEditingController();
@@ -25,15 +29,38 @@ class _AddProductState extends State<AddProduct> {
   Set<int> PackageRandomNumber = Set();
   int packagenumber = 0;
   sharedPreference sharedpref = new sharedPreference();
+  //late CollectionReference imgref;
+  late firebase_storage.Reference ref;
+  List<File> _image = [];
+  final picker = ImagePicker();
+  List<String> DownloadURL = [];
+  late Map<String, dynamic> urls;
+
+  Future uploadPackagePictures(List<XFile>? images) async {
+    int packageno = await sharedpref.getintfromSharedPreference(),
+        packagenotosend = 0;
+    setState(() {
+      packagenotosend = packageno;
+    });
+    //imgref = FirebaseFirestore.instance.collection('imageURL');
+    for (var img in images!) {
+      ref = firebase_storage.FirebaseStorage.instance
+          .ref(uid)
+          .child('Package${packagenotosend}/${Path.basename(img.path)}');
+      await ref.putFile(File(img.path)).whenComplete(() async {
+        await ref.getDownloadURL().then((value) {
+          //print('URL of image: ' + value);
+          setState(() {
+            DownloadURL.add(value);
+          });
+        });
+      });
+    }
+  }
+
   @override
   void initState() {
     getcount();
-    //getCount();
-    //print(packagenumber);
-    //used set for not repeating the random number, used last index element to set the Package Order Number
-    // PackageRandomNumber.add(
-    //     //    Random().nextInt(9999)
-    //     );------------------------------------------here-----------
     fetchinfo();
     super.initState();
   }
@@ -45,18 +72,6 @@ class _AddProductState extends State<AddProduct> {
     });
     print('SP count in product main is :' + packagenumber.toString());
   }
-
-  // Future getCount() async {
-  //   //here you can call the function and handle the output(return value) as result
-  //   sharedpref.getintfromSharedPreference().then((result) {
-  //     // print(result);
-  //     setState(() {
-  //       //handle your result here and update the count.
-  //       //update build here.
-  //       packagenumber = result;
-  //     });
-  //   }); //you can call handleError method show an alert or to try again
-  // }
 
   fetchinfo() async {
     final User user = await _auth.currentUser!;
@@ -116,10 +131,6 @@ class _AddProductState extends State<AddProduct> {
                                 });
                                 snackBar(context,
                                     "Service Added. Click to add more to Package");
-//                             var snackBar =
-//                                 SnackBar(content: Text('Service Added'));
-//                             ScaffoldMessenger.of(context)
-//                                 .showSnackBar(snackBar);
                               }),
                             );
                           },
@@ -139,18 +150,8 @@ class _AddProductState extends State<AddProduct> {
                       ),
                     ),
                     RaisedButton(
-                      onPressed: () {
-                        snackBar(context, "ADD DATA TO FIRE BASE");
-                        // print('package 1');
-                        print('path of 1st pic: ' +
-                            servicesTask[0].images![0].path);
-                        // print('path of 2nd pic: ' +
-                        //     servicesTask[0].images![1].path);
-                        //result
-                        // I/flutter (14629): package 1
-                        // I/flutter (14629): path of 1st pic: /data/user/0/com.hallbookify.hall_bookify/cache/image_picker1187040386018176509.jpg
-                        // I/flutter (14629): path of 2nd pic: /data/user/0/com.hallbookify.hall_bookify/cache/image_picker8635218453805241586.jpg
-
+                      onPressed: () async {
+                        //TODO: uncomment it
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
@@ -240,28 +241,38 @@ class _AddProductState extends State<AddProduct> {
                                                 horizontal: 8.0),
                                             child: RaisedButton(
                                               onPressed: () async {
-                                                print(
-                                                    "length before goin to DB function: " +
-                                                        servicesTask.length
-                                                            .toString());
+                                                showLoaderDialog(context);
                                                 int packageno = await sharedpref
                                                         .getintfromSharedPreference(),
                                                     packagenotosend = 0;
                                                 setState(() {
                                                   packagenotosend = packageno;
                                                 });
+                                                //TODO: add loop of service task so next images can be stored..
+                                                for (var service
+                                                    in servicesTask) {
+                                                  await uploadPackagePictures(
+                                                      service.images);
+                                                }
+                                                DownloadURL.forEach((element) {
+                                                  print('download url: ' +
+                                                      element);
+                                                });
                                                 DatabaseService(uid: uid)
                                                     .registerPackages(
                                                         packagenotosend
                                                             .toString(),
-                                                        servicesTask);
+                                                        servicesTask,
+                                                        DownloadURL);
                                                 Navigator.pop(context);
                                                 getcount();
                                                 setState(() {
                                                   servicesTask.clear();
+                                                  DownloadURL.clear();
                                                 });
-                                                // snackBar(context,
-                                                //     "Successfully added");
+                                                snackBar(context,
+                                                    "Successfully added Package.");
+                                                Navigator.pop(context);
                                               },
                                               color: Colors.purple,
                                               padding: EdgeInsets.symmetric(
