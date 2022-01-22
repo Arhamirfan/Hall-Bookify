@@ -10,14 +10,8 @@ import 'package:hall_bookify/Models/Services.dart';
 import 'package:hall_bookify/Models/sharedPreference.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addTaskScreen.dart';
 import 'package:hall_bookify/Widgets/ServicesList.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
 
 class AddProduct extends StatefulWidget {
-  // TextEditingController _serviceNameController = TextEditingController();
-  // TextEditingController _servicePriceController = TextEditingController();
-  // TextEditingController _serviceDescriptionController = TextEditingController();
-  // TextEditingController _picturesController = TextEditingController();
   @override
   _AddProductState createState() => _AddProductState();
 }
@@ -26,37 +20,9 @@ class _AddProductState extends State<AddProduct> {
   late BuildContext Context;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String uid = "";
-  Set<int> PackageRandomNumber = Set();
   int packagenumber = 0;
   sharedPreference sharedpref = new sharedPreference();
-  //late CollectionReference imgref;
   late firebase_storage.Reference ref;
-  List<File> _image = [];
-  final picker = ImagePicker();
-  List<String> DownloadURL = [];
-  late Map<String, dynamic> urls;
-
-  Future uploadPackagePictures(List<XFile>? images) async {
-    int packageno = await sharedpref.getintfromSharedPreference(),
-        packagenotosend = 0;
-    setState(() {
-      packagenotosend = packageno;
-    });
-    //imgref = FirebaseFirestore.instance.collection('imageURL');
-    for (var img in images!) {
-      ref = firebase_storage.FirebaseStorage.instance
-          .ref(uid)
-          .child('Package${packagenotosend}/${Path.basename(img.path)}');
-      await ref.putFile(File(img.path)).whenComplete(() async {
-        await ref.getDownloadURL().then((value) {
-          //print('URL of image: ' + value);
-          setState(() {
-            DownloadURL.add(value);
-          });
-        });
-      });
-    }
-  }
 
   @override
   void initState() {
@@ -248,27 +214,33 @@ class _AddProductState extends State<AddProduct> {
                                                 setState(() {
                                                   packagenotosend = packageno;
                                                 });
-                                                //TODO: add loop of service task so next images can be stored..
+                                                DatabaseService dbs =
+                                                    new DatabaseService(
+                                                        uid: uid);
+                                                //TODO: loop of service task so next images can be stored..
                                                 for (var service
                                                     in servicesTask) {
-                                                  await uploadPackagePictures(
-                                                      service.images);
+                                                  await dbs
+                                                      .uploadPackagePictures(
+                                                          service.images);
                                                 }
-                                                DownloadURL.forEach((element) {
+                                                List<String> url = dbs.imgurl;
+                                                url.forEach((element) {
                                                   print('download url: ' +
                                                       element);
                                                 });
-                                                DatabaseService(uid: uid)
-                                                    .registerPackages(
-                                                        packagenotosend
-                                                            .toString(),
-                                                        servicesTask,
-                                                        DownloadURL);
+                                                //Adding package to firebase
+                                                dbs.registerPackages(
+                                                    packagenotosend.toString(),
+                                                    servicesTask,
+                                                    url);
                                                 Navigator.pop(context);
                                                 getcount();
                                                 setState(() {
                                                   servicesTask.clear();
-                                                  DownloadURL.clear();
+                                                  dbs.DownloadURL.clear();
+                                                  dbs.imgurl.clear();
+                                                  url.clear();
                                                 });
                                                 snackBar(context,
                                                     "Successfully added Package.");

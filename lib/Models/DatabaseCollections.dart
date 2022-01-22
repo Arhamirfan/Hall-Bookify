@@ -1,11 +1,24 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:hall_bookify/Models/Services.dart';
 import 'package:hall_bookify/Models/sharedPreference.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class DatabaseService {
   DatabaseService({required this.uid});
 
-  final String uid;
+  late final String uid;
+  List<String> DownloadURL = [];
+  List<String> _imgurl = [];
+
+  List<String> get imgurl => _imgurl;
+
+  set imgurl(List<String> value) {
+    _imgurl = value;
+  }
 
   final CollectionReference userCollection1 =
       FirebaseFirestore.instance.collection('usersData');
@@ -52,5 +65,26 @@ class DatabaseService {
     } else {
       print("Cannot add more than 10 products");
     }
+  }
+
+  Future uploadPackagePictures(List<XFile>? images) async {
+    sharedPreference sharedpref = new sharedPreference();
+    int packageno = await sharedpref.getintfromSharedPreference(),
+        packagenotosend = 0;
+    packagenotosend = packageno;
+    late firebase_storage.Reference ref;
+    List<String> DownloadURL = [];
+    //imgref = FirebaseFirestore.instance.collection('imageURL');
+    for (var img in images!) {
+      ref = firebase_storage.FirebaseStorage.instance
+          .ref(uid)
+          .child('Package${packagenotosend}/${Path.basename(img.path)}');
+      await ref.putFile(File(img.path)).whenComplete(() async {
+        await ref.getDownloadURL().then((value) {
+          DownloadURL.add(value);
+        });
+      });
+    }
+    _imgurl = DownloadURL;
   }
 }
