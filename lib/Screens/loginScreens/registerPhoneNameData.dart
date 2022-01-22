@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hall_bookify/Controller/loginButtons.dart';
 import 'package:hall_bookify/Models/DatabaseCollections.dart';
-import 'package:hall_bookify/Models/ProfileDatabase.dart';
+import 'package:hall_bookify/Models/FireBaseData/ProfileDatabase.dart';
 import 'package:hall_bookify/Models/phoneAuth.dart';
 import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
 import 'package:provider/provider.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hall_bookify/Controller/textFieldInput.dart';
-import 'package:hall_bookify/Models/ProfileDatabase.dart';
+import 'package:hall_bookify/Models/FireBaseData/ProfileDatabase.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/MainMenu.dart';
+import 'package:hall_bookify/Widgets/textFieldInput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileManagement extends StatelessWidget {

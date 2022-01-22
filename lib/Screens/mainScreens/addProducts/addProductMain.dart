@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
-import 'package:hall_bookify/Controller/progressDialog.dart';
 import 'package:hall_bookify/Models/DatabaseCollections.dart';
 import 'package:hall_bookify/Models/Services.dart';
-import 'package:hall_bookify/Models/sharedPreference.dart';
+import 'package:hall_bookify/Models/sharedPreference/sharedPreference.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addTaskScreen.dart';
 import 'package:hall_bookify/Widgets/ServicesList.dart';
+import 'package:hall_bookify/Widgets/progressDialog.dart';
 
 class AddProduct extends StatefulWidget {
   @override
