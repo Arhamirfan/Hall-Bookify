@@ -1,16 +1,23 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hall_bookify/Controller/property_card.dart';
-import 'package:hall_bookify/Models/Products.dart';
+import 'package:hall_bookify/Models/FireBaseData/PackagesData.dart';
+import 'package:hall_bookify/Screens/mainScreens/HomeScreen/ViewAllPage.dart';
 import 'package:hall_bookify/Widgets/input_widget.dart';
 
 class HomePage extends StatelessWidget {
-  //TODO: Make constructor here and pass name of loggedin user and after converting map to product class pass that too in constructor..
+  final String firstname;
+  HomePage({required this.firstname});
+  TextEditingController _cityController = TextEditingController();
+  PackagesData package = new PackagesData();
+
   @override
   Widget build(BuildContext context) {
+    PackagesData tosetlength = new PackagesData();
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -24,7 +31,7 @@ class HomePage extends StatelessWidget {
                   height: 20.0,
                 ),
                 Text(
-                  'Hello \$user!',
+                  firstname != '' ? 'Hello $firstname!' : 'Let\'s get started!',
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.w800,
@@ -32,10 +39,10 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Let\'s find the best for you',
+                  'Pick best, Stay relaxed',
                   style: TextStyle(
-                    fontSize: 22.0,
-                    height: 1.3,
+                    fontSize: 18.0,
+                    height: 1.1,
                     color: Color.fromRGBO(22, 27, 40, 70),
                   ),
                 ),
@@ -74,22 +81,27 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           //Helper.nextScreen(context, Filters());
                         },
-                        child: Row(
-                          children: [
-                            Icon(
-                              FlutterIcons.ios_options_ion,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              "Filters",
-                              style: TextStyle(
+                        child: GestureDetector(
+                          onTap: () {
+                            package.getallPackages();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                FlutterIcons.ios_options_ion,
                                 color: Colors.white,
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text(
+                                "Filters",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -98,7 +110,6 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 20.0,
                 ),
-
                 SizedBox(
                   height: 25.0,
                 ),
@@ -106,17 +117,27 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "New Properties",
+                      "New Packages",
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
-                      "View all",
-                      style: TextStyle(
-                        fontSize: 15.0,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return new ViewAllPackages(
+                                length: tosetlength.totalPackages);
+                          },
+                        ));
+                      },
+                      child: Text(
+                        "View all",
+                        style: TextStyle(
+                          fontSize: 15.0,
+                        ),
                       ),
                     ),
                   ],
@@ -124,19 +145,49 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: 25.0,
                 ),
-                //TODO: get data in main menu and add map to product array list then make a streambuilder or here instead of listview.seperated
-                ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 15.0,
-                    );
-                  },
-                  itemCount: sampleProperties.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return productCard(
-                      sampleProperties[index],
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('AllPackages')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        print("length of DB collection data");
+                        print(snapshot.data!.docs.length);
+
+                        DocumentSnapshot data = snapshot.data!.docs[index];
+                        var temp = snapshot.data!.docs[index].data() as Map;
+                        tosetlength.totalPackages = snapshot.data!.docs.length;
+
+                        print(temp['uid']);
+                        print(temp['availibility']);
+                        print(temp['price']);
+                        print(temp['name']);
+                        print(temp['description']);
+                        print(temp['pictures']);
+                        //---------------------------
+                        // AllProduct product = new AllProduct(
+                        //     uid: temp['uid'],
+                        //     availibility: temp['availibility'],
+                        //     price: temp['price'],
+                        //     name: temp['name'],
+                        //     description: temp['description'],
+                        //     pictures: temp['pictures']);
+                        // allProductList.add(product);
+                        //----------------------------
+                        // return ListTile(
+                        //   leading: Icon(Icons.person),
+                        //   title: Text(data['name'][index]),
+                        //   //type 'List<dynamic>' is not a subtype of type 'String'
+                        // );
+                        return productCard2(temp);
+                      },
                     );
                   },
                 )

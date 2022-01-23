@@ -217,7 +217,7 @@ class _AddProductState extends State<AddProduct> {
                                                 DatabaseService dbs =
                                                     new DatabaseService(
                                                         uid: uid);
-                                                //TODO: loop of service task so next images can be stored..
+                                                //loop of service task so next images can be stored..
                                                 for (var service
                                                     in servicesTask) {
                                                   await dbs
@@ -229,6 +229,11 @@ class _AddProductState extends State<AddProduct> {
                                                   print('download url: ' +
                                                       element);
                                                 });
+                                                //storing data in all products
+
+                                                dbs.registerAllPackages(
+                                                    servicesTask, url, uid);
+
                                                 //Adding package to firebase
                                                 dbs.registerPackages(
                                                     packagenotosend.toString(),

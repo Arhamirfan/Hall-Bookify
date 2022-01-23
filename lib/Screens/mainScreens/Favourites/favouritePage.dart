@@ -5,9 +5,9 @@ class Favourite extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.lightBlueAccent,
         child: Center(
-          child: Text('This is 4th screen favourite product'),
+          child: Text(
+              'Empty favourities list\nBrowse Packages to add them to favourities.☺'),
         ),
       ),
     );

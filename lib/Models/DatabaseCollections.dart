@@ -25,6 +25,9 @@ class DatabaseService {
   final CollectionReference userCollection2 =
       FirebaseFirestore.instance.collection('Packages');
 
+  final CollectionReference userCollection3 =
+      FirebaseFirestore.instance.collection('AllPackages');
+
   Future registerCustomer(String firstname, String lastname, String phoneno,
       String address, String city, String cnic, String userID) async {
     return await userCollection1.doc(uid).set({
@@ -65,6 +68,33 @@ class DatabaseService {
     } else {
       print("Cannot add more than 10 products");
     }
+  }
+
+  Future registerAllPackages(
+      List<Services> allproductTask, List<String> url, String uid) async {
+    print("all products________________");
+    print(uid);
+    print(allproductTask);
+    List<String> names = [];
+    List<String> price = [];
+    List<String> desc = [];
+    List<bool> availibility = [];
+    for (int i = 0; i < allproductTask.length; i++) {
+      print(allproductTask[i].name);
+      names.add(allproductTask[i].name);
+      price.add(allproductTask[i].price);
+      desc.add(allproductTask[i].description);
+      availibility.add(allproductTask[i].availibility);
+    }
+
+    await userCollection3.doc().set({
+      'name': names,
+      'price': price,
+      'description': desc,
+      'availibility': availibility,
+      'pictures': url,
+      'uid': uid
+    });
   }
 
   Future uploadPackagePictures(List<XFile>? images) async {

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:hall_bookify/Models/Products.dart';
 
-class productCard extends StatelessWidget {
-  final Product product;
-  productCard(this.product);
+class productCard2 extends StatelessWidget {
+  final Map data;
+  productCard2(this.data);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,11 +20,36 @@ class productCard extends StatelessWidget {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        product.imagePath,
+                        data['pictures'][0],
                       ),
                     ),
                   ),
                 ),
+                Positioned(
+                  bottom: -12.0,
+                  left: 10.0,
+                  child: Container(
+                    width: 45.0,
+                    height: 45.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: data['availibility'][0].toString() == "true"
+                          ? Colors.purple
+                          : Color.fromRGBO(255, 136, 0, 1),
+                    ),
+                    child: Center(
+                      child: Text(
+                        data['availibility'][0].toString() == 'true'
+                            ? "Available"
+                            : "Booked",
+                        style: TextStyle(
+                          fontSize: 8.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -39,14 +63,14 @@ class productCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        product.name,
+                        data['name'][0],
                         style: TextStyle(
                           fontSize: 17.0,
                         ),
                       ),
                     ),
                     Text(
-                      '\$ ${product.price}',
+                      '\$ ${data['price'][0]}',
                       style: TextStyle(
                         fontSize: 17.0,
                         color: Colors.blue,
@@ -58,7 +82,7 @@ class productCard extends StatelessWidget {
                   height: 5.0,
                 ),
                 Text(
-                  product.description,
+                  data['description'][0],
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Color(0xFF343434),
@@ -70,7 +94,7 @@ class productCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      FlutterIcons.map_pin_fea,
+                      FlutterIcons.event_available_mdi,
                       size: 15.0,
                       color: Color.fromRGBO(255, 136, 0, 1),
                     ),
@@ -78,7 +102,7 @@ class productCard extends StatelessWidget {
                       width: 5.0,
                     ),
                     Text(
-                      product.address,
+                      data['availibility'][0].toString(),
                       style: TextStyle(
                         fontSize: 13.0,
                         color: Color(0xFF343434),

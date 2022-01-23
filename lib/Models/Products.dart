@@ -11,11 +11,30 @@ class Product {
 
 List<Product> sampleProperties = [
   Product('hall', 'this is description', '68//8 old civil line', '7500',
-      'https://firebasestorage.googleapis.com/v0/b/hall-bookify.appspot.com/o/YWHeWyyv1YNjZvyFAKxhWB0lT6m2%2FPackage0%2Fimage_picker4582458011361677597.jpg?alt=media&token=92ffb1f3-86ec-44b5-b7bc-65c1dc8d53cd'),
+      'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'),
   Product(
       'hall',
       'this is description,this is description,this is description,this is description,this is description,this is description,this is description',
       '68//8 old civil line',
       '7500',
-      'https://firebasestorage.googleapis.com/v0/b/hall-bookify.appspot.com/o/YWHeWyyv1YNjZvyFAKxhWB0lT6m2%2FPackage0%2Fimage_picker4582458011361677597.jpg?alt=media&token=92ffb1f3-86ec-44b5-b7bc-65c1dc8d53cd')
+      'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg')
 ];
+
+class AllProduct {
+  final String uid;
+  final List<String> availibility;
+  final List<String> price;
+  final List<String> name;
+  final List<String> description;
+  final List<String> pictures;
+
+  AllProduct(
+      {required this.uid,
+      required this.availibility,
+      required this.price,
+      required this.name,
+      required this.description,
+      required this.pictures});
+}
+
+List<AllProduct> allProductList = [];
