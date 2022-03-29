@@ -162,30 +162,11 @@ class HomePage extends StatelessWidget {
                         print(snapshot.data!.docs.length);
 
                         DocumentSnapshot data = snapshot.data!.docs[index];
-                        var temp = snapshot.data!.docs[index].data() as Map;
+                        final temp = snapshot.data!.docs[index].data() as Map;
                         tosetlength.totalPackages = snapshot.data!.docs.length;
 
                         print(temp['uid']);
-                        print(temp['availibility']);
-                        print(temp['price']);
-                        print(temp['name']);
-                        print(temp['description']);
-                        print(temp['pictures']);
-                        //---------------------------
-                        // AllProduct product = new AllProduct(
-                        //     uid: temp['uid'],
-                        //     availibility: temp['availibility'],
-                        //     price: temp['price'],
-                        //     name: temp['name'],
-                        //     description: temp['description'],
-                        //     pictures: temp['pictures']);
-                        // allProductList.add(product);
-                        //----------------------------
-                        // return ListTile(
-                        //   leading: Icon(Icons.person),
-                        //   title: Text(data['name'][index]),
-                        //   //type 'List<dynamic>' is not a subtype of type 'String'
-                        // );
+                        print(temp['package']);
                         return productCard2(temp);
                       },
                     );
@@ -199,31 +180,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-//Button for logout
-// Flexible(
-//   child: Padding(
-//     padding:
-//         const EdgeInsets.only(bottom: 10.0, left: 25, right: 25),
-//     child: Container(
-//       height: MediaQuery.of(context).size.height * .08,
-//       width: MediaQuery.of(context).size.width,
-//       child: loginButton(
-//           buttontext: 'LOGOUT',
-//           buttonColour: Colors.black,
-//           buttontextColour: Colors.white,
-//           onpressed: () async {
-//             final SharedPreferences sharedpreference =
-//                 await SharedPreferences.getInstance();
-//             sharedpreference.remove('PHONE');
-//             //TODO: also apply check for facebook and google login
-//             Navigator.popUntil(
-//                 context, ModalRoute.withName(SplashScreen.id));
-//             Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                     builder: (context) => getStartedScreen()));
-//           }),
-//     ),
-//   ),
-// )

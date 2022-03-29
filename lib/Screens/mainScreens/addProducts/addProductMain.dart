@@ -10,6 +10,7 @@ import 'package:hall_bookify/Models/sharedPreference/sharedPreference.dart';
 import 'package:hall_bookify/Screens/mainScreens/addProducts/addTaskScreen.dart';
 import 'package:hall_bookify/Widgets/ServicesList.dart';
 import 'package:hall_bookify/Widgets/progressDialog.dart';
+import 'package:hall_bookify/Widgets/textFieldInput.dart';
 
 class AddProduct extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   late BuildContext Context;
+  TextEditingController _packageNameController = TextEditingController();
+  TextEditingController _packageLocationController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String uid = "";
   int packagenumber = 0;
@@ -36,6 +39,7 @@ class _AddProductState extends State<AddProduct> {
     setState(() {
       packagenumber = packageno;
     });
+    //sharedpref.resetCounter();
     print('SP count in product main is :' + packagenumber.toString());
   }
 
@@ -59,7 +63,7 @@ class _AddProductState extends State<AddProduct> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 Text('Number of Services added : ${servicesTask.length}' +
                     "\n (Long Press to remove item)"),
@@ -72,7 +76,29 @@ class _AddProductState extends State<AddProduct> {
                           style: kmlblueText,
                         ),
                       )
-                    : ServicesList(servicesTask: servicesTask),
+                    : Wrap(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: buildTextField("PACKAGE NAME",
+                                "e.g. Elite Supplier", _packageNameController),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: buildTextField(
+                                "LOCATION",
+                                "e.g. 91-8B Kiran Block, Lahore",
+                                _packageLocationController),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text("Services : ",
+                                style: TextStyle(color: Colors.grey)),
+                          ),
+                          ServicesList(servicesTask: servicesTask),
+                        ],
+                      ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -142,6 +168,20 @@ class _AddProductState extends State<AddProduct> {
                                       'CONFIRM PACKAGE',
                                       textAlign: TextAlign.center,
                                       style: kmlpurpleboldText,
+                                    ),
+                                    Text(
+                                      'PACKAGE NAME: ' +
+                                          _packageNameController.text,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'Location: ' +
+                                          _packageLocationController.text,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Container(
                                       height:
@@ -217,33 +257,48 @@ class _AddProductState extends State<AddProduct> {
                                                 DatabaseService dbs =
                                                     new DatabaseService(
                                                         uid: uid);
-                                                //loop of service task so next images can be stored..
+
+                                                print(
+                                                    "Package to add number: " +
+                                                        packagenotosend
+                                                            .toString());
+                                                //uploading images
                                                 for (var service
                                                     in servicesTask) {
                                                   await dbs
                                                       .uploadPackagePictures(
                                                           service.images);
                                                 }
+                                                //printing images URL
                                                 List<String> url = dbs.imgurl;
                                                 url.forEach((element) {
-                                                  print('download url: ' +
-                                                      element);
+                                                  print(
+                                                      'uploaded images url: ' +
+                                                          element);
                                                 });
                                                 //storing data in all products
-
                                                 dbs.registerAllPackages(
-                                                    servicesTask, url, uid);
-
+                                                    _packageNameController.text,
+                                                    _packageLocationController
+                                                        .text,
+                                                    servicesTask,
+                                                    url,
+                                                    uid);
                                                 //Adding package to firebase
                                                 dbs.registerPackages(
+                                                    _packageNameController.text,
+                                                    _packageLocationController
+                                                        .text,
                                                     packagenotosend.toString(),
                                                     servicesTask,
                                                     url);
                                                 Navigator.pop(context);
                                                 getcount();
+                                                //clearing data after uploading
                                                 setState(() {
                                                   servicesTask.clear();
                                                   dbs.DownloadURL.clear();
+                                                  dbs.imgDownloadURL.clear();
                                                   dbs.imgurl.clear();
                                                   url.clear();
                                                 });
