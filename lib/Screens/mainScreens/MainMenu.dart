@@ -5,6 +5,7 @@ import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Controller/MainDrawer.dart';
 import 'package:hall_bookify/Models/FireBaseData/PackagesData.dart';
 import 'package:hall_bookify/Models/FireBaseData/ProfileDatabase.dart';
+import 'package:hall_bookify/Screens/mainScreens/Cart.dart';
 import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
 import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/ManagementMainActivity.dart';
 import 'package:hall_bookify/Screens/mainScreens/SearchProduct/searchProductMain.dart';
@@ -111,9 +112,15 @@ class _MainMenuState extends State<MainMenu> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return new Cart();
+                  },
+                ));
+              },
               icon: Icon(
-                Icons.shopping_cart_outlined,
+                Icons.shopping_cart,
                 color: Colors.purple,
               ))
         ],

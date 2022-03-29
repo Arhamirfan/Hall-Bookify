@@ -243,8 +243,9 @@ class _View_PackageState extends State<View_Package> {
                       label: Text('Add To Cart', style: kmediumwhiteText),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
-                          primary:
-                              cartnumber == 1 ? Colors.grey : Colors.purple),
+                          primary: cartnumber == 1
+                              ? Colors.grey
+                              : Colors.purpleAccent),
                     )),
               ],
             )
