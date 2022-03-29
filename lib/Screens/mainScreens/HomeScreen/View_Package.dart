@@ -12,6 +12,23 @@ class View_Package extends StatefulWidget {
 }
 
 class _View_PackageState extends State<View_Package> {
+  int total = 0;
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < widget.package_details['price'].length; i++) {
+      int value = int.parse(widget.package_details['price'][i]);
+      total = total + value;
+    }
+    print("Total price is : " + total.toString());
+  }
+
+  @override
+  void dispose() {
+    total = 0;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,12 +64,18 @@ class _View_PackageState extends State<View_Package> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(widget.package_details['package'],
+                                      overflow: TextOverflow.ellipsis,
                                       style: klargeblackboldText),
                                   Row(
                                     children: [
                                       Icon(Icons.location_on_outlined,
                                           color: Colors.purple),
-                                      Text(widget.package_details['location']),
+                                      Text(
+                                        widget.package_details['location'],
+                                        softWrap: false,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -81,8 +104,41 @@ class _View_PackageState extends State<View_Package> {
                               )
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Text("data")
+                          ListTile(
+                            title:
+                                Text('Services', style: kmediumblackboldText),
+                            trailing:
+                                Text('Price', style: kmediumblackboldText),
+                          ),
+                          Divider(thickness: 0.5),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount:
+                                  widget.package_details['services'].length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    child: ListTile(
+                                  title: Text(
+                                      widget.package_details['services'][index],
+                                      style: kmediumblackboldText),
+                                  subtitle: Text(
+                                      widget.package_details['description']
+                                          [index],
+                                      style: ksmallgreyText),
+                                  trailing: Text('PKR. ' +
+                                      widget.package_details['price'][index]),
+                                ));
+                              },
+                            ),
+                          ),
+                          ListTile(
+                            title:
+                                Text('Total : ', style: kmediumblackboldText),
+                            trailing: Text("PKR. " + total.toString(),
+                                style: kmediumblackboldText),
+                          )
                         ],
                       ),
                     ),
@@ -136,4 +192,9 @@ Swiper ImageSlider(BuildContext context, List<dynamic> images) {
       );
     },
   );
+}
+
+Container servicesDataContainer(BuildContext context, List<dynamic> serviceName,
+    List<dynamic> serviceDescription, List<dynamic> servicePrice) {
+  return new Container();
 }

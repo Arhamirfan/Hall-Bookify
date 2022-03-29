@@ -88,6 +88,8 @@ const kxxxlwhiteText = TextStyle(color: Colors.white, fontSize: 50);
 
 const ksmallblackText = TextStyle(color: Colors.black, fontSize: 10);
 const kmediumblackText = TextStyle(color: Colors.black, fontSize: 15);
+const kmediumblackboldText =
+    TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold);
 const klargeblackText = TextStyle(color: Colors.black, fontSize: 20);
 const klargeblackboldText =
     TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold);
