@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:hall_bookify/Controller/loginButtons.dart';
+import 'package:hall_bookify/Constants.dart';
 
 class View_Package extends StatefulWidget {
   final Map package_details;
@@ -34,9 +34,57 @@ class _View_PackageState extends State<View_Package> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    color: Colors.purpleAccent,
-                    child: Column(
-                      children: [Text('data'), Text("data")],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.package_details['package'],
+                                      style: klargeblackboldText),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.location_on_outlined,
+                                          color: Colors.purple),
+                                      Text(widget.package_details['location']),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  OutlinedButton(
+                                    onPressed: () {},
+                                    child:
+                                        Icon(Icons.share, color: Colors.green),
+                                    style: OutlinedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                  ),
+                                  OutlinedButton(
+                                    onPressed: () {},
+                                    child: Icon(Icons.favorite_outlined,
+                                        color: Colors.red),
+                                    style: OutlinedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Text("data")
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -44,8 +92,15 @@ class _View_PackageState extends State<View_Package> {
             ),
             Container(
                 height: 60,
-                child: startediconButton(
-                    buttontext: "Add To Cart", onpressed: () {}))
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.shopping_cart),
+                  label: Text('Book Now', style: kmediumwhiteText),
+                  style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(), primary: Colors.purpleAccent),
+                ))
           ],
         ),
       ),
