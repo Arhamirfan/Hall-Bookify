@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hall_bookify/Constants.dart';
+import 'package:hall_bookify/Models/DatabaseCollections.dart';
+
+import '../../../Models/sharedPreference/sharedPreference.dart';
+import '../../../Widgets/progressDialog.dart';
 
 class View_Package extends StatefulWidget {
   final Map package_details;
@@ -12,15 +17,42 @@ class View_Package extends StatefulWidget {
 }
 
 class _View_PackageState extends State<View_Package> {
-  int total = 0;
+  int total = 0, cartnumber = 0;
+  double creatorFee = 0, subTotal = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
+  String buyer_uid = "";
+
+  fetchinfo() async {
+    final User user = await _auth.currentUser!;
+    setState(() {
+      buyer_uid = user.uid;
+    });
+  }
+
+  void getCartCount() async {
+    int cartno = await sharedpreference.getintfromSharedPreference();
+    setState(() {
+      cartnumber = cartno;
+    });
+    //sharedpref.resetCounter();
+    print('Shared Preference cart count:' + cartnumber.toString());
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchinfo();
+    getCartCount();
     for (int i = 0; i < widget.package_details['price'].length; i++) {
       int value = int.parse(widget.package_details['price'][i]);
       total = total + value;
     }
+    creatorFee = total * 0.02;
+    subTotal = total + creatorFee;
     print("Total price is : " + total.toString());
+    print("Creator Fee : " + creatorFee.toString());
+    print("Sub Total : " + subTotal.toString());
   }
 
   @override
@@ -133,12 +165,26 @@ class _View_PackageState extends State<View_Package> {
                               },
                             ),
                           ),
-                          ListTile(
-                            title:
-                                Text('Total : ', style: kmediumblackboldText),
-                            trailing: Text("PKR. " + total.toString(),
-                                style: kmediumblackboldText),
-                          )
+                          Divider(thickness: 0.5),
+                          Container(
+                            height: 25,
+                            child: ListTile(
+                              title: Text('Total : ', style: kmediumblackText),
+                              trailing: Text("PKR. " + total.toString(),
+                                  style: kmediumblackboldText),
+                            ),
+                          ),
+                          Container(
+                            height: 25,
+                            child: ListTile(
+                              title: Text('Creator Fee : ',
+                                  style: kmediumblackText),
+                              subtitle: Text('(2% of total payment)'),
+                              trailing: Text("PKR. " + creatorFee.toString(),
+                                  style: kmediumblackboldText),
+                            ),
+                          ),
+                          SizedBox(height: 30),
                         ],
                       ),
                     ),
@@ -146,36 +192,66 @@ class _View_PackageState extends State<View_Package> {
                 ],
               ),
             ),
-            Container(
-                height: 60,
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.shopping_cart),
-                  label: Text('Book Now', style: kmediumwhiteText),
-                  style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(), primary: Colors.purpleAccent),
-                ))
+            Column(
+              children: [
+                Divider(thickness: 0.5),
+                Container(
+                  height: 25,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ListTile(
+                    title: Text('Sub Total : ', style: kmediumblackboldText),
+                    trailing: Text("PKR. " + subTotal.toString(),
+                        style: kmediumblackboldText),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        showLoaderDialog(context);
+                        DatabaseService dbs =
+                            new DatabaseService(uid: buyer_uid);
+
+                        //TODO: add a shared preference counter from his file as used in addProductMain. Check if counter is 1 then canot add more then 1 item because 1 is already added else add here 1 item.
+                        //sharedpref to check not adding more than 1 item to cart
+                        // int cart_no = await sharedpreference
+                        //         .getintfromSharedPreference(),
+                        //     cartnumberToCheck = 0;
+                        // setState(() {
+                        //   cartnumberToCheck = cart_no;
+                        // });
+
+                        //if (cartnumberToCheck < 2) {
+                        //  print("Cart no : " + cartnumberToCheck.toString());
+                        dbs.addToCartPackage(
+                            buyer_uid,
+                            widget.package_details,
+                            total.toString(),
+                            creatorFee.toString(),
+                            subTotal.toString());
+                        Navigator.pop(context);
+                        // } else {
+                        //   print("---- LIMIT REACHED-----");
+                        //   print("Cart no in -- else -- : " +
+                        //       cartnumberToCheck.toString());
+                        // }
+                      },
+                      icon: Icon(Icons.shopping_cart),
+                      label: Text('Add To Cart', style: kmediumwhiteText),
+                      style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(),
+                          primary:
+                              cartnumber == 1 ? Colors.grey : Colors.purple),
+                    )),
+              ],
+            )
           ],
         ),
       ),
     );
-    //   Container(
-    //   color: Colors.white,
-    //   child: Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Text("Package name : " + widget.package_details['package'],
-    //           style: kmediumblackText),
-    //       Text("service name : " + widget.package_details['services'][0],
-    //           style: kmediumblackText),
-    //       Text("Package price : " + widget.package_details['description'][0],
-    //           style: kmediumblackText)
-    //     ],
-    //   ),
-    // );
   }
 }
 

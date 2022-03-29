@@ -28,6 +28,9 @@ class DatabaseService {
   final CollectionReference userCollection3 =
       FirebaseFirestore.instance.collection('AllPackages');
 
+  final CollectionReference userCollection4 =
+      FirebaseFirestore.instance.collection('Cart');
+
   Future registerCustomer(String firstname, String lastname, String phoneno,
       String address, String city, String cnic, String userID) async {
     return await userCollection1.doc(uid).set({
@@ -120,5 +123,33 @@ class DatabaseService {
       });
     }
     _imgurl = imgDownloadURL;
+  }
+
+  Future addToCartPackage(String buyer_uid, Map package, String total,
+      String creatorFee, String subTotal) async {
+    sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
+    int cart_no = await sharedpreference.getintfromSharedPreference();
+    if (cart_no < 1) {
+      print("--------Cart Details---------");
+      print("Buyer : " + buyer_uid);
+      print("Seller : " + package['uid']);
+      print("Sub total : " + subTotal);
+
+      await userCollection4.doc().set({
+        'buyer uid': buyer_uid,
+        'seller uid': package['uid'],
+        'Package': package['package'],
+        'Location': package['location'],
+        'Services': package['services'],
+        'Services Price': package['price'],
+        'Total': total,
+        'Creator Fee': creatorFee,
+        'Sub Total': subTotal
+      });
+
+      sharedpreference.incrementCounter();
+    } else {
+      print('Sorry cannot add more item to cart');
+    }
   }
 }
