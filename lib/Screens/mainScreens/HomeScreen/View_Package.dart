@@ -215,17 +215,6 @@ class _View_PackageState extends State<View_Package> {
                         DatabaseService dbs =
                             new DatabaseService(uid: buyer_uid);
 
-                        //TODO: add a shared preference counter from his file as used in addProductMain. Check if counter is 1 then canot add more then 1 item because 1 is already added else add here 1 item.
-                        //sharedpref to check not adding more than 1 item to cart
-                        // int cart_no = await sharedpreference
-                        //         .getintfromSharedPreference(),
-                        //     cartnumberToCheck = 0;
-                        // setState(() {
-                        //   cartnumberToCheck = cart_no;
-                        // });
-
-                        //if (cartnumberToCheck < 2) {
-                        //  print("Cart no : " + cartnumberToCheck.toString());
                         dbs.addToCartPackage(
                             buyer_uid,
                             widget.package_details,
@@ -233,14 +222,15 @@ class _View_PackageState extends State<View_Package> {
                             creatorFee.toString(),
                             subTotal.toString());
                         Navigator.pop(context);
-                        // } else {
-                        //   print("---- LIMIT REACHED-----");
-                        //   print("Cart no in -- else -- : " +
-                        //       cartnumberToCheck.toString());
-                        // }
+                        setState(() {
+                          cartnumber = 1;
+                        });
                       },
                       icon: Icon(Icons.shopping_cart),
-                      label: Text('Add To Cart', style: kmediumwhiteText),
+                      label: cartnumber == 1
+                          ? Text('Cannot Add More To Cart',
+                              style: kmediumwhiteText)
+                          : Text('Add To Cart', style: kmediumwhiteText),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
                           primary: cartnumber == 1

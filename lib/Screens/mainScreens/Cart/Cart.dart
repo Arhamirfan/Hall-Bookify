@@ -7,6 +7,8 @@ import '../../../Constants.dart';
 import '../../../Models/Cart/customer.dart';
 import '../../../Models/Cart/invoice.dart';
 import '../../../Models/Cart/supplier.dart';
+import '../../../Models/sharedPreference/sharedPreference.dart';
+import '../../../Widgets/progressDialog.dart';
 import 'Api/pdf_invoice_api.dart';
 
 class Cart extends StatefulWidget {
@@ -107,8 +109,21 @@ class _CartState extends State<Cart> {
                                             color: Colors.red,
                                           ),
                                           color: Colors.red,
-                                          onPressed: () {
-                                            //TODO: add card here that is on profile page..
+                                          onPressed: () async {
+                                            showLoaderDialog(context);
+                                            sharedPreferenceForCart
+                                                sharedpreference =
+                                                new sharedPreferenceForCart();
+                                            sharedpreference.resetCounter();
+                                            var collection = FirebaseFirestore
+                                                .instance
+                                                .collection('Cart');
+                                            var snapshots =
+                                                await collection.get();
+                                            for (var doc in snapshots.docs) {
+                                              await doc.reference.delete();
+                                            }
+                                            Navigator.pop(context);
                                           },
                                         ),
                                       ),
