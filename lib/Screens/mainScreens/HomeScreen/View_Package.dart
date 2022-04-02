@@ -159,7 +159,7 @@ class _View_PackageState extends State<View_Package> {
                                       widget.package_details['description']
                                           [index],
                                       style: ksmallgreyText),
-                                  trailing: Text('PKR. ' +
+                                  trailing: Text('\$' +
                                       widget.package_details['price'][index]),
                                 ));
                               },
@@ -170,7 +170,7 @@ class _View_PackageState extends State<View_Package> {
                             height: 25,
                             child: ListTile(
                               title: Text('Total : ', style: kmediumblackText),
-                              trailing: Text("PKR. " + total.toString(),
+                              trailing: Text("\$ " + total.toString(),
                                   style: kmediumblackboldText),
                             ),
                           ),
@@ -180,7 +180,7 @@ class _View_PackageState extends State<View_Package> {
                               title: Text('Creator Fee : ',
                                   style: kmediumblackText),
                               subtitle: Text('(2% of total payment)'),
-                              trailing: Text("PKR. " + creatorFee.toString(),
+                              trailing: Text("\$ " + creatorFee.toString(),
                                   style: kmediumblackboldText),
                             ),
                           ),
@@ -200,7 +200,7 @@ class _View_PackageState extends State<View_Package> {
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ListTile(
                     title: Text('Sub Total : ', style: kmediumblackboldText),
-                    trailing: Text("PKR. " + subTotal.toString(),
+                    trailing: Text("\$ " + subTotal.toString(),
                         style: kmediumblackboldText),
                   ),
                 ),

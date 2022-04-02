@@ -84,6 +84,8 @@ class DatabaseService {
     List<String> price = [];
     List<String> desc = [];
     List<bool> availibility = [];
+    double total = 0;
+
     for (int i = 0; i < allproductTask.length; i++) {
       print(allproductTask[i].name);
       names.add(allproductTask[i].name);
@@ -92,13 +94,21 @@ class DatabaseService {
       availibility.add(allproductTask[i].availibility);
     }
 
+    for (int i = 0; i < price.length; i++) {
+      double strToDouble = double.parse(price[i]);
+      total = total + strToDouble;
+    }
+    print('Total package price: ' + total.toString());
+
     await userCollection3.doc().set({
       'package': packageName,
       'location': location,
       'services': names,
       'price': price,
+      'totalprice': total,
       'description': desc,
       'availibility': availibility,
+      'package_availability': true,
       'pictures': url,
       'uid': uid
     });

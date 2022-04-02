@@ -81,7 +81,7 @@ class productCard2 extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$ ${package_details['price'][0]}',
+                        'Starting: \$${package_details['price'][0]}',
                         style: TextStyle(
                           fontSize: 17.0,
                           color: Colors.blue,
