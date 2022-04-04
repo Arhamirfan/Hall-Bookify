@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hall_bookify/Screens/mainScreens/Cart/Api/pdf_api.dart';
+import 'package:hall_bookify/Models/DatabaseOperations.dart';
 
 import '../../../Constants.dart';
 import '../../../Models/Cart/customer.dart';
@@ -9,6 +9,7 @@ import '../../../Models/Cart/invoice.dart';
 import '../../../Models/Cart/supplier.dart';
 import '../../../Models/sharedPreference/sharedPreference.dart';
 import '../../../Widgets/progressDialog.dart';
+import 'Api/pdf_api.dart';
 import 'Api/pdf_invoice_api.dart';
 
 class Cart extends StatefulWidget {
@@ -18,6 +19,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int cart_size = 0;
+  late Map CartData;
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,11 @@ class _CartState extends State<Cart> {
                       FirebaseFirestore.instance.collection('Cart').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return Container(
+                        child: Center(
+                            child: Text('No Data found in DB cart.',
+                                style: kmediumblackboldText)),
+                      );
                     }
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
@@ -56,7 +62,9 @@ class _CartState extends State<Cart> {
                         print("cart size : " + cart_size.toString());
                         DocumentSnapshot data = snapshot.data!.docs[index];
                         final temp = snapshot.data!.docs[index].data() as Map;
-
+                        if (temp.length > 0) {
+                          CartData = temp;
+                        }
                         print(temp['buyer uid']);
                         print(temp['Package']);
                         return Container(
@@ -145,45 +153,73 @@ class _CartState extends State<Cart> {
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: ElevatedButton.icon(
                     onPressed: () async {
+                      DatabaseOperations dboperation = new DatabaseOperations();
+                      print('--Fetching Cart Data from assigning from temp: ');
+                      if (CartData.isNotEmpty) {
+                        //TODO: Check if same user is buying pakage as providing. Uncomment it before publishing and finalizing..
+                        // if(CartData['buyer uid'] == CartData['seller uid']){
+                        //   print('Buyer cannot be the seller. Login with different ID');
+                        // } else{
+                        //   //paste all operations here..
+                        // }
+                        await dboperation.getBuyerData(CartData['buyer uid']);
+                        await dboperation.getSellerData(CartData['seller uid']);
+                        String buyerFullName =
+                            dboperation.buyerData['firstname'] +
+                                " " +
+                                dboperation.buyerData['lastname'];
+                        String sellerFullName =
+                            dboperation.sellerData['firstname'] +
+                                " " +
+                                dboperation.sellerData['lastname'];
+                        print(sellerFullName);
+                        print(dboperation.buyerData['address']);
+                        //
 //
 //
 //
 //
 //
 //
-//
-                      //TODO: generate a unique random invoice number
-                      final date = DateTime.now();
-                      final dueDate = date.add(Duration(days: 10));
-                      //TODO: get name of loggedin user data from db (query: where id = loggedin id) and in setstate set it and display here
-                      final invoice = Invoice(
-                        supplier: Supplier(
-                            name: 'arham',
-                            address: 'sahiwal',
-                            paymentaddress: '03206522050'),
-                        customer:
-                            Customer(name: 'yousaf', address: 'faisalabad'),
-                        info: InvoiceInfo(
-                            date: date,
-                            dueDate: dueDate,
-                            description: 'My description..',
-                            number: '${DateTime.now().year}-9999'),
-                        items: [
-                          //Todo: change it to cart package name, description, price, creator fee, services names
-                          InvoiceItem(
-                            description: 'hall bookify',
-                            date: date,
-                            quantity: 1,
-                            vat: 0.19,
-                            unitPrice: 99,
-                          ),
-                        ],
-                      );
-                      //TODO: save invoice all details to DB Firestore.
+                        //TODO: generate a unique random invoice number
+                        final date = DateTime.now();
+                        final dueDate = date.add(Duration(days: 10));
+                        final String invoiceNumber =
+                            '1${DateTime.now().microsecond}830${DateTime.now().second}';
+                        final invoice = Invoice(
+                          supplier: Supplier(
+                              name: sellerFullName,
+                              address: dboperation.sellerData['address'],
+                              paymentaddress:
+                                  dboperation.sellerData['paymentaddress']),
+                          customer: Customer(
+                              name: buyerFullName,
+                              address: dboperation.buyerData['address']),
+                          info: InvoiceInfo(
+                              date: date,
+                              dueDate: dueDate,
+                              description:
+                                  'The package ${CartData['Package']} is booked by $buyerFullName. This invoice will be shown to $sellerFullName with the payment status as verified once you pay through ETH by metamask from our website.',
+                              number: invoiceNumber),
+                          items: [
+                            //Todo: change it to cart package name, description, price, creator fee, services names
+                            InvoiceItem(
+                              packageName: CartData['Package'],
+                              date: date,
+                              location: CartData['Location'],
+                              quantity: 1,
+                              vat: 0.025,
+                              unitPrice: double.parse(CartData['Total']),
+                            ),
+                          ],
+                        );
+                        //TODO: save invoice all details to DB Firestore.
 
-                      final pdfFile = await PdfInvoiceApi.generate(invoice);
+                        final pdfFile = await PdfInvoiceApi.generate(invoice);
 
-                      PdfApi.openFile(pdfFile);
+                        PdfApi.openFile(pdfFile);
+
+                        //DB receipt : invoice number, buyer/seller uid,name, address, walletaddress, package, price, total, vat(change to creater fee), sub total
 //
 //
 //
@@ -192,7 +228,25 @@ class _CartState extends State<Cart> {
 //
 //
 //
-//
+//                    uncomment it For deleting package from cart after booking.. add receipt to db and review after it.
+//                         showLoaderDialog(context);
+//                         sharedPreferenceForCart
+//                         sharedpreference =
+//                         new sharedPreferenceForCart();
+//                         sharedpreference.resetCounter();
+//                         var collection = FirebaseFirestore
+//                             .instance
+//                             .collection('Cart');
+//                         var snapshots =
+//                         await collection.get();
+//                         for (var doc in snapshots.docs) {
+//                           await doc.reference.delete();
+//                         }
+//                         Navigator.pop(context);
+                      } else {
+                        print(
+                            "Cart Data is empty. Cart empty or didn't fetched data");
+                      }
                     },
                     icon: Icon(Icons.document_scanner_outlined),
                     label: Text('Generate Invoice', style: kmediumwhiteText),

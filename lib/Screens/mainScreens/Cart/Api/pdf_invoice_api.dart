@@ -26,7 +26,7 @@ class PdfInvoiceApi {
       footer: (context) => buildFooter(invoice),
     ));
 
-    return PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: 'HallBookify_invoice.pdf', pdf: pdf);
   }
 
   static Widget buildHeader(Invoice invoice) => Column(
@@ -37,14 +37,16 @@ class PdfInvoiceApi {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildSupplierAddress(invoice.supplier),
-              Container(
-                height: 50,
-                width: 50,
-                child: BarcodeWidget(
-                  barcode: Barcode.qrCode(),
-                  data: invoice.info.number,
-                ),
-              ),
+              ProviderApp()
+              //TODO: uncomment to add Bar code
+              // Container(
+              //   height: 50,
+              //   width: 50,
+              //   child: BarcodeWidget(
+              //     barcode: Barcode.qrCode(),
+              //     data: invoice.info.number,
+              //   ),
+              // ),
             ],
           ),
           SizedBox(height: 1 * PdfPageFormat.cm),
@@ -62,11 +64,20 @@ class PdfInvoiceApi {
   static Widget buildCustomerAddress(Customer customer) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Buyer', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 1 * PdfPageFormat.mm),
           Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
           Text(customer.address),
         ],
       );
 
+  static Widget ProviderApp() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('HALL BOOKIFY', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 1 * PdfPageFormat.mm),
+        ],
+      );
   static Widget buildInvoiceInfo(InvoiceInfo info) {
     final paymentTerms = '${info.dueDate.difference(info.date).inDays} days';
     final titles = <String>[
@@ -96,6 +107,8 @@ class PdfInvoiceApi {
   static Widget buildSupplierAddress(Supplier supplier) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Supplier', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 1 * PdfPageFormat.mm),
           Text(supplier.name, style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 1 * PdfPageFormat.mm),
           Text(supplier.address),
@@ -117,23 +130,26 @@ class PdfInvoiceApi {
 
   static Widget buildInvoice(Invoice invoice) {
     final headers = [
-      'Description',
+      'Package',
       'Date',
+      'Location',
       'Quantity',
-      'Unit Price',
-      'VAT',
+      'Price',
+      'Creator Fee',
       'Total'
     ];
     final data = invoice.items.map((item) {
       final total = item.unitPrice * item.quantity * (1 + item.vat);
+      final vatPercent = invoice.items.first.vat * 100;
 
       return [
-        item.description,
+        item.packageName,
         Utils.formatDate(item.date),
+        item.location,
         '${item.quantity}',
-        '\$ ${item.unitPrice}',
-        '${item.vat} %',
-        '\$ ${total.toStringAsFixed(2)}',
+        '\$ ${item.unitPrice.toStringAsFixed(0)}',
+        '${vatPercent.toStringAsFixed(1)} %',
+        '\$ ${total.toStringAsFixed(0)}',
       ];
     }).toList();
 
@@ -213,7 +229,8 @@ class PdfInvoiceApi {
           buildSimpleText(title: 'Address', value: invoice.supplier.address),
           SizedBox(height: 1 * PdfPageFormat.mm),
           buildSimpleText(
-              title: 'Paypal', value: invoice.supplier.paymentaddress),
+              title: 'Payment: (Metamask)',
+              value: invoice.supplier.paymentaddress),
         ],
       );
 
