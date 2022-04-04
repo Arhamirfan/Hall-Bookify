@@ -31,6 +31,9 @@ class DatabaseService {
   final CollectionReference userCollection4 =
       FirebaseFirestore.instance.collection('Cart');
 
+  final CollectionReference userCollection5 =
+      FirebaseFirestore.instance.collection('Receipt');
+
   Future registerCustomer(String firstname, String lastname, String phoneno,
       String address, String city, String cnic, String userID) async {
     return await userCollection1.doc(uid).set({
@@ -161,5 +164,45 @@ class DatabaseService {
     } else {
       print('Sorry cannot add more item to cart');
     }
+  }
+
+  Future generateReceipt(
+      String invoiceNumber, Map buyer, Map seller, Map package) async {
+    String status = "pending";
+    //DB receipt : invoice number, buyer/seller uid,name, address, walletaddress, package, price, total, creater fee, sub total, status: pending/paid
+    print('-------RECEIPT-------');
+    print('seller: ' + seller['userid'] + seller['paymentaddress']);
+    print('buyer: ' + buyer['userid'] + buyer['address']);
+    print('package:');
+    print(' package name' + package['Package']);
+    print(' location' + package['Location']);
+    print(' total' + package['Total']);
+    print(' creator fee' + package['Creator Fee']);
+    print('subtotal: ' + package['Sub Total']);
+    await userCollection5.doc().set({
+      'invoicenumber': invoiceNumber,
+      'selleruid': seller['userid'],
+      'sellername': seller['firstname'] + " " + seller['lastname'],
+      'sellerwalletaddress': seller['paymentaddress'],
+      'buyeruid': buyer['userid'],
+      'buyername': buyer['firstname'] + " " + buyer['lastname'],
+      'buyeraddress': buyer['address'],
+      'package': package['Package'],
+      'location': package['Location'],
+      'packageprice': package['Total'],
+      'creatorfee': package['Creator Fee'],
+      'total': package['Sub Total'],
+      'status': status
+    }).whenComplete(() {
+      print('-------RECEIPT Confirmation-------');
+      print('seller: ' + seller['userid'] + seller['paymentaddress']);
+      print('buyer: ' + buyer['userid'] + buyer['address']);
+      print('package:');
+      print(' package name' + package['Package']);
+      print(' location' + package['Location']);
+      print(' total' + package['Total']);
+      print(' creator fee' + package['Creator Fee']);
+      print('subtotal: ' + package['Sub Total']);
+    });
   }
 }

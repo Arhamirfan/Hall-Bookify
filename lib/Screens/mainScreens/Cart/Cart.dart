@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hall_bookify/Models/DatabaseCollections.dart';
 import 'package:hall_bookify/Models/DatabaseOperations.dart';
 
 import '../../../Constants.dart';
@@ -104,40 +105,56 @@ class _CartState extends State<Cart> {
                                   height: MediaQuery.of(context).size.height,
                                   child: Wrap(
                                     children: [
-                                      ListTile(
-                                        leading: Icon(Icons.apartment,
-                                            color: Colors.purpleAccent),
-                                        title: Text(temp['Package'],
-                                            style: klargeblackboldText),
-                                        subtitle:
-                                            Text("\$" + temp['Sub Total']),
-                                        trailing: IconButton(
-                                          icon: Icon(
-                                            Icons.delete_rounded,
-                                            color: Colors.red,
+                                      Container(
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          color: Colors.black12,
+                                          image: new DecorationImage(
+                                            image: new AssetImage(
+                                                "assets/images/cloudy.png"),
+                                            fit: BoxFit.cover,
                                           ),
-                                          color: Colors.red,
-                                          onPressed: () async {
-                                            showLoaderDialog(context);
-                                            sharedPreferenceForCart
-                                                sharedpreference =
-                                                new sharedPreferenceForCart();
-                                            sharedpreference.resetCounter();
-                                            var collection = FirebaseFirestore
-                                                .instance
-                                                .collection('Cart');
-                                            var snapshots =
-                                                await collection.get();
-                                            for (var doc in snapshots.docs) {
-                                              await doc.reference.delete();
-                                            }
-                                            Navigator.pop(context);
-                                          },
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 15.0),
+                                          child: ListTile(
+                                            title: Text(temp['Package'],
+                                                style: klargeblackboldText),
+                                            subtitle:
+                                                Text("\$" + temp['Sub Total']),
+                                            trailing: IconButton(
+                                              icon: Icon(
+                                                Icons.delete_rounded,
+                                                color: Colors.red,
+                                              ),
+                                              color: Colors.red,
+                                              onPressed: () async {
+                                                showLoaderDialog(context);
+                                                sharedPreferenceForCart
+                                                    sharedpreference =
+                                                    new sharedPreferenceForCart();
+                                                sharedpreference.resetCounter();
+                                                var collection =
+                                                    FirebaseFirestore.instance
+                                                        .collection('Cart');
+                                                var snapshots =
+                                                    await collection.get();
+                                                for (var doc
+                                                    in snapshots.docs) {
+                                                  await doc.reference.delete();
+                                                }
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -181,7 +198,6 @@ class _CartState extends State<Cart> {
 //
 //
 //
-                        //TODO: generate a unique random invoice number
                         final date = DateTime.now();
                         final dueDate = date.add(Duration(days: 10));
                         final String invoiceNumber =
@@ -202,7 +218,6 @@ class _CartState extends State<Cart> {
                                   'The package ${CartData['Package']} is booked by $buyerFullName. This invoice will be shown to $sellerFullName with the payment status as verified once you pay through ETH by metamask from our website.',
                               number: invoiceNumber),
                           items: [
-                            //Todo: change it to cart package name, description, price, creator fee, services names
                             InvoiceItem(
                               packageName: CartData['Package'],
                               date: date,
@@ -213,13 +228,17 @@ class _CartState extends State<Cart> {
                             ),
                           ],
                         );
-                        //TODO: save invoice all details to DB Firestore.
 
                         final pdfFile = await PdfInvoiceApi.generate(invoice);
 
                         PdfApi.openFile(pdfFile);
 
-                        //DB receipt : invoice number, buyer/seller uid,name, address, walletaddress, package, price, total, vat(change to creater fee), sub total
+                        showLoaderDialog(context);
+                        //DB receipt : invoice number, buyer/seller uid,name, address, walletaddress, package, price, total, creater fee, sub total, status: pending/paid
+                        DatabaseService db = new DatabaseService(
+                            uid: dboperation.sellerData['userid']);
+                        db.generateReceipt(invoiceNumber, dboperation.buyerData,
+                            dboperation.sellerData, CartData);
 //
 //
 //
@@ -228,21 +247,17 @@ class _CartState extends State<Cart> {
 //
 //
 //
-//                    uncomment it For deleting package from cart after booking.. add receipt to db and review after it.
-//                         showLoaderDialog(context);
-//                         sharedPreferenceForCart
-//                         sharedpreference =
-//                         new sharedPreferenceForCart();
-//                         sharedpreference.resetCounter();
-//                         var collection = FirebaseFirestore
-//                             .instance
-//                             .collection('Cart');
-//                         var snapshots =
-//                         await collection.get();
-//                         for (var doc in snapshots.docs) {
-//                           await doc.reference.delete();
-//                         }
-//                         Navigator.pop(context);
+//                     deleting package from cart after booking.. add receipt to db and review after it.
+                        sharedPreferenceForCart sharedpreference =
+                            new sharedPreferenceForCart();
+                        sharedpreference.resetCounter();
+                        var collection =
+                            FirebaseFirestore.instance.collection('Cart');
+                        var snapshots = await collection.get();
+                        for (var doc in snapshots.docs) {
+                          await doc.reference.delete();
+                        }
+                        Navigator.pop(context);
                       } else {
                         print(
                             "Cart Data is empty. Cart empty or didn't fetched data");
