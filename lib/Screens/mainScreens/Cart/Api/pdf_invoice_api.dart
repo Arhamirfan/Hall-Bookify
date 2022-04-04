@@ -133,9 +133,8 @@ class PdfInvoiceApi {
       'Package',
       'Date',
       'Location',
-      'Quantity',
       'Price',
-      'Creator Fee',
+      'CreatorFee',
       'Total'
     ];
     final data = invoice.items.map((item) {
@@ -146,7 +145,6 @@ class PdfInvoiceApi {
         item.packageName,
         Utils.formatDate(item.date),
         item.location,
-        '${item.quantity}',
         '\$ ${item.unitPrice.toStringAsFixed(0)}',
         '${vatPercent.toStringAsFixed(1)} %',
         '\$ ${total.toStringAsFixed(0)}',

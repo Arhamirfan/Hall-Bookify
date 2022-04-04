@@ -208,7 +208,7 @@ class _CartState extends State<Cart> {
                               date: date,
                               location: CartData['Location'],
                               quantity: 1,
-                              vat: 0.025,
+                              vat: 0.020,
                               unitPrice: double.parse(CartData['Total']),
                             ),
                           ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Models/DatabaseCollections.dart';
+import 'package:hall_bookify/Models/DatabaseOperations.dart';
 
 import '../../../Models/sharedPreference/sharedPreference.dart';
 import '../../../Widgets/progressDialog.dart';
@@ -21,7 +22,8 @@ class _View_PackageState extends State<View_Package> {
   double creatorFee = 0, subTotal = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
-  String buyer_uid = "";
+  String buyer_uid = "", seller_uid = "";
+  DatabaseOperations dboperation = new DatabaseOperations();
 
   fetchinfo() async {
     final User user = await _auth.currentUser!;
@@ -39,11 +41,17 @@ class _View_PackageState extends State<View_Package> {
     print('Shared Preference cart count:' + cartnumber.toString());
   }
 
+  void getSellerData() async {
+    seller_uid = widget.package_details['uid'];
+    await dboperation.getSellerData(seller_uid);
+  }
+
   @override
   void initState() {
     super.initState();
     fetchinfo();
     getCartCount();
+    getSellerData();
     for (int i = 0; i < widget.package_details['price'].length; i++) {
       int value = int.parse(widget.package_details['price'][i]);
       total = total + value;
@@ -65,11 +73,6 @@ class _View_PackageState extends State<View_Package> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   leading: Icon(Icons.arrow_back),
-      //   title: Text(widget.package_details['package']),
-      //   backgroundColor: Colors.purpleAccent,
-      // ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,22 +119,32 @@ class _View_PackageState extends State<View_Package> {
                                 children: [
                                   OutlinedButton(
                                     onPressed: () {},
-                                    child:
-                                        Icon(Icons.share, color: Colors.green),
-                                    style: OutlinedButton.styleFrom(
-                                      shape: CircleBorder(),
-                                      padding: EdgeInsets.all(5),
-                                    ),
-                                  ),
-                                  OutlinedButton(
-                                    onPressed: () {},
                                     child: Icon(Icons.favorite_outlined,
                                         color: Colors.red),
                                     style: OutlinedButton.styleFrom(
                                       shape: CircleBorder(),
                                       padding: EdgeInsets.all(5),
                                     ),
-                                  )
+                                  ),
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      print('seller id: ' +
+                                          dboperation.sellerData['userid']);
+                                      print('seller number: ' +
+                                          dboperation.sellerData['phoneno']);
+                                      whatsappMessage(
+                                          number:
+                                              dboperation.sellerData['phoneno'],
+                                          message:
+                                              'Hello sir, I want to know about your package ${widget.package_details['package']}');
+                                    },
+                                    child: Icon(Icons.whatsapp,
+                                        color: Colors.green),
+                                    style: OutlinedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                  ),
                                 ],
                               )
                             ],

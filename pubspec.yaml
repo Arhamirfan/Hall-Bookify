@@ -41,6 +41,7 @@ dependencies:
   pdf: ^2.1.0
   open_file: ^3.2.1
   path_provider: ^2.0.9
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

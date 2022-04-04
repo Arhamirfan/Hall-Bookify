@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final BoxDecoration pinPutDecoration = BoxDecoration(
   color: Colors.white,
@@ -69,6 +70,11 @@ void snackBar(BuildContext context, String message) {
   var snackbar =
       SnackBar(content: Text(message), backgroundColor: Colors.lightBlueAccent);
   ScaffoldMessenger.of(context).showSnackBar(snackbar);
+}
+
+void whatsappMessage({required number, required message}) async {
+  String url = "https://wa.me/${number}?text=${message}";
+  await canLaunch(url) ? launch(url) : print('Cannot open whatsapp');
 }
 
 const ksmallText = TextStyle(fontSize: 10);
