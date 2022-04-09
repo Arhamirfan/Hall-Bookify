@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseOperations {
   var buyerData;
+  var packageData;
   Map<dynamic, dynamic> sellerData = {};
   final CollectionReference userCollection1 =
       FirebaseFirestore.instance.collection('usersData');
@@ -43,5 +44,17 @@ class DatabaseOperations {
       });
     });
     //print(sellerData);
+  }
+
+  Future getAndUpdatePackageData(String packageName) async {
+    await userCollection3
+        .where('package', isEqualTo: packageName)
+        .get()
+        .then((QuerySnapshot querysnapshot) {
+      querysnapshot.docs.forEach((element) {
+        packageData = element.data() as Map;
+        userCollection3.doc(element.id).update({'package_availibility': false});
+      });
+    });
   }
 }

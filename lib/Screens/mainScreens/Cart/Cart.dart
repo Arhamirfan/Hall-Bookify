@@ -239,6 +239,10 @@ class _CartState extends State<Cart> {
                             uid: dboperation.sellerData['userid']);
                         db.generateReceipt(invoiceNumber, dboperation.buyerData,
                             dboperation.sellerData, CartData);
+
+                        // get by package name and update all_package data to booked
+                        dboperation
+                            .getAndUpdatePackageData(CartData['Package']);
 //
 //
 //

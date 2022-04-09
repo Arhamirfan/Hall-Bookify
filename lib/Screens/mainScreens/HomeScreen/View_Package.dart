@@ -240,15 +240,24 @@ class _View_PackageState extends State<View_Package> {
                         });
                       },
                       icon: Icon(Icons.shopping_cart),
-                      label: cartnumber == 1
-                          ? Text('Cannot Add More To Cart',
-                              style: kmediumwhiteText)
-                          : Text('Add To Cart', style: kmediumwhiteText),
+                      label: widget.package_details['package_availibility']
+                                  .toString() ==
+                              'false'
+                          ? Text('Not available')
+                          : cartnumber == 1
+                              ? Text('Cannot Add More To Cart',
+                                  style: kmediumwhiteText)
+                              : Text('Add To Cart', style: kmediumwhiteText),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
-                          primary: cartnumber == 1
+                          primary: widget
+                                      .package_details['package_availibility']
+                                      .toString() ==
+                                  'false'
                               ? Colors.grey
-                              : Colors.purpleAccent),
+                              : cartnumber == 1
+                                  ? Colors.grey
+                                  : Colors.purpleAccent),
                     )),
               ],
             )
