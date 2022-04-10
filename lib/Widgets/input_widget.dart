@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class InputWidget extends StatelessWidget {
+  TextEditingController controller;
   final String hintText;
   final IconData prefixIcon;
   final double height;
   InputWidget(
-      {required this.hintText, required this.prefixIcon, this.height = 53.0});
+      {required this.controller,
+      required this.hintText,
+      required this.prefixIcon,
+      this.height = 53.0});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +23,7 @@ class InputWidget extends StatelessWidget {
         left: this.prefixIcon == null ? 16.0 : 0.0,
       ),
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           prefixIcon: this.prefixIcon == null
               ? null

@@ -8,6 +8,7 @@ class DatabaseOperations {
   var buyerData;
   var packageData;
   Map<dynamic, dynamic> sellerData = {};
+
   final CollectionReference userCollection1 =
       FirebaseFirestore.instance.collection('usersData');
 
@@ -57,4 +58,19 @@ class DatabaseOperations {
       });
     });
   }
+
+  // Future<Map<dynamic, dynamic>> getPackageByName(String packageName) async {
+  //   Map<dynamic, dynamic> SearchedPackages = {};
+  //   print('send name:' + packageName);
+  //   await userCollection3
+  //       .where('package', isEqualTo: packageName)
+  //       .get()
+  //       .then((QuerySnapshot querysnapshot) {
+  //     querysnapshot.docs.forEach((element) {
+  //       print(element.data());
+  //       SearchedPackages = element.data() as Map;
+  //     });
+  //   });
+  //   return SearchedPackages;
+  // }
 }

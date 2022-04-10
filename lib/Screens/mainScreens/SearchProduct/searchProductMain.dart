@@ -9,7 +9,7 @@ class SearchProduct extends StatefulWidget {
 
 class _SearchProductState extends State<SearchProduct> {
   List<int> selectedIndices = [];
-  TextEditingController _cityController = TextEditingController();
+  TextEditingController _packageNameController = TextEditingController();
 
   void selectUnselect(int index) {
     setState(() {
@@ -56,6 +56,7 @@ class _SearchProductState extends State<SearchProduct> {
                       Expanded(
                         flex: 3,
                         child: InputWidget(
+                          controller: _packageNameController,
                           hintText: "Find by package name, price or location",
                           prefixIcon: Icons.search,
                         ),

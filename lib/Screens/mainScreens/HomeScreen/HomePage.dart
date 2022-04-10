@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hall_bookify/Controller/property_card.dart';
 import 'package:hall_bookify/Models/FireBaseData/PackagesData.dart';
-import 'package:hall_bookify/Screens/mainScreens/HomeScreen/ViewAllPage.dart';
+import 'package:hall_bookify/Screens/mainScreens/SearchProduct/Searches/ViewAllPackages.dart';
+import 'package:hall_bookify/Screens/mainScreens/SearchProduct/Searches/ViewPackageByName.dart';
 import 'package:hall_bookify/Widgets/input_widget.dart';
 
 class HomePage extends StatelessWidget {
   final String firstname;
   HomePage({required this.firstname});
-  TextEditingController _cityController = TextEditingController();
+  TextEditingController _packageNameController = TextEditingController();
   PackagesData package = new PackagesData();
 
   @override
@@ -53,8 +54,9 @@ class HomePage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: InputWidget(
+                        controller: _packageNameController,
                         height: 44.0,
-                        hintText: "Search",
+                        hintText: "Search Package",
                         prefixIcon: FlutterIcons.search1_ant,
                       ),
                     ),
@@ -82,20 +84,39 @@ class HomePage extends StatelessWidget {
                           //Helper.nextScreen(context, Filters());
                         },
                         child: GestureDetector(
-                          onTap: () {
-                            package.getallPackages();
+                          onTap: () async {
+                            //package.getallPackages();
+                            //showLoaderDialog(context);
+                            // Map<dynamic, dynamic> packageDetails = {};
+                            // DatabaseOperations dboperations =
+                            //     new DatabaseOperations();
+                            // packageDetails = await dboperations
+                            //     .getPackageByName(_packageNameController.text);
+                            // Navigator.pop(context);
+                            //
+                            // print('------SEARCHED PACKAGE ------------');
+                            // print(packageDetails);
+                            // print('Package length: ' +
+                            //     packageDetails.length.toString());
+
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return new ViewPackageByName(
+                                    PackageName: _packageNameController.text);
+                              },
+                            ));
                           },
                           child: Row(
                             children: [
                               Icon(
-                                FlutterIcons.ios_options_ion,
+                                Icons.search,
                                 color: Colors.white,
                               ),
                               SizedBox(
                                 width: 10.0,
                               ),
                               Text(
-                                "Filters",
+                                "SEARCH",
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
