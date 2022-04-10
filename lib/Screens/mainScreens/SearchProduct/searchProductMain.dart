@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/static_data.dart';
 import 'package:hall_bookify/Widgets/input_widget.dart';
 
+import 'Searches/ViewPackageByPrice.dart';
+
 class SearchProduct extends StatefulWidget {
   @override
   _SearchProductState createState() => _SearchProductState();
@@ -9,7 +11,8 @@ class SearchProduct extends StatefulWidget {
 
 class _SearchProductState extends State<SearchProduct> {
   List<int> selectedIndices = [];
-  TextEditingController _packageNameController = TextEditingController();
+  TextEditingController _packageSearchedDetailController =
+      TextEditingController();
 
   void selectUnselect(int index) {
     setState(() {
@@ -56,8 +59,8 @@ class _SearchProductState extends State<SearchProduct> {
                       Expanded(
                         flex: 3,
                         child: InputWidget(
-                          controller: _packageNameController,
-                          hintText: "Find by package name, price or location",
+                          controller: _packageSearchedDetailController,
+                          hintText: "Find by package price",
                           prefixIcon: Icons.search,
                         ),
                       ),
@@ -67,7 +70,18 @@ class _SearchProductState extends State<SearchProduct> {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: FlatButton(
                                 color: Colors.purpleAccent,
-                                onPressed: () {},
+                                onPressed: () {
+                                  print('passed data: ' +
+                                      _packageSearchedDetailController.text);
+                                  Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) {
+                                      return new ViewPackageByPrice(
+                                          PackagePrice:
+                                              _packageSearchedDetailController
+                                                  .text);
+                                    },
+                                  ));
+                                },
                                 child: Text('Search',
                                     style: TextStyle(color: Colors.white))),
                           ))
