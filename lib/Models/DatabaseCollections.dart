@@ -34,8 +34,15 @@ class DatabaseService {
   final CollectionReference userCollection5 =
       FirebaseFirestore.instance.collection('Receipt');
 
-  Future registerCustomer(String firstname, String lastname, String phoneno,
-      String address, String city, String cnic, String userID) async {
+  Future registerCustomer(
+      String firstname,
+      String lastname,
+      String phoneno,
+      String address,
+      String city,
+      String cnic,
+      String userID,
+      String paymentmethod) async {
     return await userCollection1.doc(uid).set({
       'firstname': firstname,
       'lastname': lastname,
@@ -44,7 +51,8 @@ class DatabaseService {
       'city': city,
       'cnic': cnic,
       'role': 'customer',
-      'userid': userID
+      'userid': userID,
+      'paymentaddress': paymentmethod
     });
   }
 

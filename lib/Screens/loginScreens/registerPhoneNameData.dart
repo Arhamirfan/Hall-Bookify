@@ -81,7 +81,12 @@ class _AccountVerificationState extends State<AccountVerification> {
 class nameRegistration extends StatelessWidget {
   nameRegistration({required this.phoneNumber});
   static const String id = 'nameRegistration';
-  String first = "", last = "", address = "", city = "", cnic = "";
+  String first = "",
+      last = "",
+      address = "",
+      city = "",
+      cnic = "",
+      paymentmethod = "";
   final String phoneNumber;
   var userID = FirebaseAuth.instance.currentUser!.uid;
   //late final Function oncontextChanged;
@@ -109,9 +114,9 @@ class nameRegistration extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height * .6,
               width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'What\'s your name?',
@@ -130,6 +135,12 @@ class nameRegistration extends StatelessWidget {
                     style: kmlblackText,
                   ),
                   loginDetailsMethodcnic(context),
+                  SizedBox(height: 20),
+                  Text(
+                    'Payment Method',
+                    style: kmlblackText,
+                  ),
+                  loginDetailsMethodpayment(context),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Container(
@@ -157,9 +168,10 @@ class nameRegistration extends StatelessWidget {
                           print(address);
                           print(city);
                           print(cnic);
+                          print(paymentmethod);
                           DatabaseService(uid: userID)
                               .registerCustomer(first, last, phoneNumber,
-                                  address, city, cnic, userID)
+                                  address, city, cnic, userID, paymentmethod)
                               .then((value) async {
                             // SharedPreferences sharedpreference =
                             //     await SharedPreferences.getInstance();
@@ -302,6 +314,35 @@ class nameRegistration extends StatelessWidget {
               ],
               decoration: InputDecoration(
                 hintText: 'XXXXX-XXXXXXX-X',
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row loginDetailsMethodpayment(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: TextField(
+              maxLength: 42,
+              onChanged: (value) {
+                paymentmethod = Provider.of<getnames>(context, listen: false)
+                    .registerNames(value);
+              },
+              decoration: InputDecoration(
+                hintText: '0xd486bA9998DA2d69CfcdCAf4cCe50Fdd99F77c71',
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
                 ),

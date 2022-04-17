@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/static_data.dart';
+import 'package:hall_bookify/Screens/mainScreens/SearchProduct/Searches/ViewPackageByName.dart';
 import 'package:hall_bookify/Widgets/input_widget.dart';
-
-import 'Searches/ViewPackageByPrice.dart';
 
 class SearchProduct extends StatefulWidget {
   @override
@@ -10,19 +9,8 @@ class SearchProduct extends StatefulWidget {
 }
 
 class _SearchProductState extends State<SearchProduct> {
-  List<int> selectedIndices = [];
   TextEditingController _packageSearchedDetailController =
       TextEditingController();
-
-  void selectUnselect(int index) {
-    setState(() {
-      if (selectedIndices.contains(index)) {
-        selectedIndices.remove(index);
-      } else {
-        selectedIndices.add(index);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +63,8 @@ class _SearchProductState extends State<SearchProduct> {
                                       _packageSearchedDetailController.text);
                                   Navigator.push(context, MaterialPageRoute(
                                     builder: (context) {
-                                      return new ViewPackageByPrice(
-                                          PackagePrice:
+                                      return new ViewPackageByName(
+                                          PackageName:
                                               _packageSearchedDetailController
                                                   .text);
                                     },
@@ -115,13 +103,11 @@ class _SearchProductState extends State<SearchProduct> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          selectUnselect(index);
+                          StaticData.categories[index].function(context);
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: selectedIndices.contains(index)
-                                ? Colors.purpleAccent
-                                : Color.fromRGBO(245, 246, 250, 1),
+                            color: Color.fromRGBO(245, 246, 250, 1),
                             borderRadius: BorderRadius.circular(18.0),
                           ),
                           child: Column(

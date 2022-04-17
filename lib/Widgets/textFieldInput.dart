@@ -65,3 +65,39 @@ Widget buildTextFieldMultiline(
     ),
   );
 }
+
+Widget buildTextFieldNoPadding(
+    String labelText, String hintText, TextEditingController controler) {
+  return TextField(
+    controller: controler,
+    decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(bottom: 3),
+        labelText: labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        )),
+  );
+}
+
+Widget buildTextFieldNumberNoPadding(
+    String labelText, String hintText, TextEditingController controler) {
+  return TextField(
+    controller: controler,
+    keyboardType: TextInputType.number,
+    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(bottom: 3),
+        labelText: labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        hintText: hintText,
+        hintStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        )),
+  );
+}

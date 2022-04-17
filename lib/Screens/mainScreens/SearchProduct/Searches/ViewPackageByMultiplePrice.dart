@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/property_card.dart';
 
-class ViewPackageByPrice extends StatelessWidget {
-  String PackagePrice;
+class ViewPackageByMultiplePrice extends StatelessWidget {
+  String maxPrice, minPrice;
   int length = 0;
-  ViewPackageByPrice({required this.PackagePrice});
+  ViewPackageByMultiplePrice({required this.minPrice, required this.maxPrice});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Searched Price- \$" + PackagePrice),
+        title: Text("Price Range: \$ $minPrice - \$" + maxPrice),
         centerTitle: true,
         backgroundColor: Colors.purpleAccent,
       ),
@@ -52,10 +52,9 @@ class ViewPackageByPrice extends StatelessWidget {
                 stream: FirebaseFirestore.instance
                     .collection('AllPackages')
                     .where('totalprice',
-                        isLessThanOrEqualTo: double.parse(PackagePrice) + 100)
+                        isLessThanOrEqualTo: double.parse(maxPrice))
                     .where('totalprice',
-                        isGreaterThanOrEqualTo:
-                            double.parse(PackagePrice) - 100)
+                        isGreaterThanOrEqualTo: double.parse(minPrice))
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {

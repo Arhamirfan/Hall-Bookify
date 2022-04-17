@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Models/sharedPreference/sharedPreference.dart';
 
 class MainDrawer extends StatelessWidget {
   var uid;
@@ -162,10 +165,22 @@ class MainDrawer extends StatelessWidget {
                         SizedBox(height: 20),
                         GestureDetector(
                           onTap: () async {
+                            //empty phone logged in info in shared preference
                             final SharedPreferences sharedpreference =
                                 await SharedPreferences.getInstance();
                             sharedpreference.remove('PHONE');
 
+                            //empty cart..
+                            sharedPreferenceForCart sharedprefer =
+                                new sharedPreferenceForCart();
+                            sharedprefer.resetCounter();
+                            var collection =
+                                FirebaseFirestore.instance.collection('Cart');
+                            var snapshots = await collection.get();
+                            for (var doc in snapshots.docs) {
+                              await doc.reference.delete();
+                            }
+                            //exit app previous screens
                             Navigator.popUntil(
                                 context, ModalRoute.withName(SplashScreen.id));
                             Navigator.push(

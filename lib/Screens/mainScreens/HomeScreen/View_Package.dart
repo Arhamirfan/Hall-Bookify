@@ -224,40 +224,51 @@ class _View_PackageState extends State<View_Package> {
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        showLoaderDialog(context);
-                        DatabaseService dbs =
-                            new DatabaseService(uid: buyer_uid);
+                        print('buyer id:  ' + buyer_uid);
+                        print('seller id: ' + seller_uid);
+                        if (buyer_uid != seller_uid) {
+                          if (widget.package_details['package_availibility'] !=
+                              false) {
+                            showLoaderDialog(context);
+                            DatabaseService dbs =
+                                new DatabaseService(uid: buyer_uid);
 
-                        dbs.addToCartPackage(
-                            buyer_uid,
-                            widget.package_details,
-                            total.toString(),
-                            creatorFee.toString(),
-                            subTotal.toString());
-                        Navigator.pop(context);
-                        setState(() {
-                          cartnumber = 1;
-                        });
+                            dbs.addToCartPackage(
+                                buyer_uid,
+                                widget.package_details,
+                                total.toString(),
+                                creatorFee.toString(),
+                                subTotal.toString());
+                            Navigator.pop(context);
+                            setState(() {
+                              cartnumber = 1;
+                            });
+                          }
+                        }
                       },
                       icon: Icon(Icons.shopping_cart),
-                      label: widget.package_details['package_availibility']
-                                  .toString() ==
-                              'false'
-                          ? Text('Not available')
-                          : cartnumber == 1
-                              ? Text('Cannot Add More To Cart',
-                                  style: kmediumwhiteText)
-                              : Text('Add To Cart', style: kmediumwhiteText),
-                      style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(),
-                          primary: widget
-                                      .package_details['package_availibility']
+                      label: buyer_uid == seller_uid
+                          ? Text('Error: Same Buyer & Seller')
+                          : widget.package_details['package_availibility']
                                       .toString() ==
                                   'false'
-                              ? Colors.grey
+                              ? Text('Not available')
                               : cartnumber == 1
+                                  ? Text('Cannot Add More To Cart',
+                                      style: kmediumwhiteText)
+                                  : Text('Add To Cart',
+                                      style: kmediumwhiteText),
+                      style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(),
+                          primary: buyer_uid == seller_uid
+                              ? Colors.grey
+                              : widget.package_details['package_availibility']
+                                          .toString() ==
+                                      'false'
                                   ? Colors.grey
-                                  : Colors.purpleAccent),
+                                  : cartnumber == 1
+                                      ? Colors.grey
+                                      : Colors.purpleAccent),
                     )),
               ],
             )
