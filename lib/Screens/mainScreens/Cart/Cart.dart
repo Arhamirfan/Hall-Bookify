@@ -243,6 +243,11 @@ class _CartState extends State<Cart> {
                         // get by package name and update all_package data to booked
                         dboperation
                             .getAndUpdatePackageData(CartData['Package']);
+
+                        //sharedpreference for receipt to show status order booked.. remove in orderstatus file when receipt status is paid.
+                        sharedPreferenceForReceipt spr =
+                            new sharedPreferenceForReceipt();
+                        await spr.setValueForReceipt(int.parse(invoiceNumber));
 //
 //
 //

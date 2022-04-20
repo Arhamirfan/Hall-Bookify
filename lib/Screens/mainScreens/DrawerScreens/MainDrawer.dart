@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
+import 'package:hall_bookify/Screens/mainScreens/Cart/Cart.dart';
+import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/orderStatus.dart';
+import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Models/sharedPreference/sharedPreference.dart';
+import '../../../Models/sharedPreference/sharedPreference.dart';
 
 class MainDrawer extends StatelessWidget {
   var uid;
@@ -132,7 +135,13 @@ class MainDrawer extends StatelessWidget {
                               'Favourities',
                               style: kmediumblackText,
                             ),
-                            onTap: () {}),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return Favourite();
+                                },
+                              ));
+                            }),
                         ListTile(
                             leading: Icon(Icons.shopping_cart_outlined,
                                 color: Colors.purpleAccent),
@@ -140,15 +149,27 @@ class MainDrawer extends StatelessWidget {
                               'Cart',
                               style: kmediumblackText,
                             ),
-                            onTap: () {}),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return Cart();
+                                },
+                              ));
+                            }),
                         ListTile(
-                            leading: Icon(Icons.location_on_outlined,
+                            leading: Icon(Icons.shopping_basket_outlined,
                                 color: Colors.purpleAccent),
                             title: Text(
-                              'Addresses',
+                              'Order Status',
                               style: kmediumblackText,
                             ),
-                            onTap: () {}),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return orderStatus();
+                                },
+                              ));
+                            }),
                         ListTile(
                             leading: Icon(Icons.help_outline,
                                 color: Colors.purpleAccent),

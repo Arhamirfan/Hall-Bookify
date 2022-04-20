@@ -34,6 +34,9 @@ class DatabaseService {
   final CollectionReference userCollection5 =
       FirebaseFirestore.instance.collection('Receipt');
 
+  final CollectionReference userCollection6 =
+      FirebaseFirestore.instance.collection('Favourities');
+
   Future registerCustomer(
       String firstname,
       String lastname,

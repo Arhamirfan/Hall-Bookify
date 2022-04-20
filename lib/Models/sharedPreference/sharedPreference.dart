@@ -57,3 +57,37 @@ class sharedPreferenceForCart {
     await pref.setInt('cartcounter', 0);
   }
 }
+
+class sharedPreferenceForReceipt {
+  Future<void> incrementCounter() async {
+    final pref = await SharedPreferences.getInstance();
+    int lastnumber = await getintfromSharedPreference();
+    int currentNumber = ++lastnumber;
+
+    if (currentNumber == 2) {
+      print("Cannot add more than 1 package to receipt.");
+      //resetCounter();
+    } else {
+      await pref.setInt('receiptinvoice', currentNumber);
+    }
+  }
+
+  Future<void> setValueForReceipt(int invoicenumber) async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setInt('receiptinvoice', invoicenumber);
+  }
+
+  Future<int> getintfromSharedPreference() async {
+    final pref = await SharedPreferences.getInstance();
+    final startupNumber = pref.getInt('receiptinvoice');
+    if (startupNumber == null) {
+      return 0;
+    }
+    return startupNumber;
+  }
+
+  Future<void> resetCounter() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setInt('receiptinvoice', 0);
+  }
+}

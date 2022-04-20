@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseOperations {
   var buyerData;
   var packageData;
+  var receiptData;
   Map<dynamic, dynamic> sellerData = {};
 
   final CollectionReference userCollection1 =
@@ -20,6 +21,16 @@ class DatabaseOperations {
 
   final CollectionReference userCollection4 =
       FirebaseFirestore.instance.collection('Cart');
+
+  final CollectionReference userCollection5 =
+      FirebaseFirestore.instance.collection('Receipt');
+
+  final CollectionReference userCollection6 =
+      FirebaseFirestore.instance.collection('Favourities');
+
+  Future addToFavourities(Map package) async {
+    return await userCollection6.doc().set(package);
+  }
 
   Future getBuyerData(String buyerUid) async {
     //print('buyer data');
@@ -59,6 +70,41 @@ class DatabaseOperations {
     });
   }
 
+  Future getReceiptData(String invoiceNumber) async {
+    //print('seller Data');
+    await userCollection5
+        .where('invoicenumber', isEqualTo: invoiceNumber)
+        .get()
+        .then((QuerySnapshot querysnapshot) {
+      querysnapshot.docs.forEach((element) {
+        receiptData = element.data() as Map;
+      });
+    });
+    //print(sellerData);
+  }
+
+  Future getpackageDataAndAddRatings(
+      String packagename, double ratingstars, String rating_description) async {
+    //print('seller Data');
+    var packageDocumentId;
+    await userCollection3
+        .where('package', isEqualTo: packagename)
+        .get()
+        .then((QuerySnapshot querysnapshot) {
+      querysnapshot.docs.forEach((element) {
+        receiptData = element.data() as Map;
+        packageDocumentId = element.id;
+      });
+    });
+    await userCollection3.doc(packageDocumentId).set(
+        {'rating_stars': ratingstars, 'rating_description': rating_description},
+        SetOptions(merge: true)).then((value) {
+      print('successfully added ratings');
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
+    //print(sellerData);
+  }
   // Future<Map<dynamic, dynamic>> getPackageByName(String packageName) async {
   //   Map<dynamic, dynamic> SearchedPackages = {};
   //   print('send name:' + packageName);

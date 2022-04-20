@@ -118,7 +118,13 @@ class _View_PackageState extends State<View_Package> {
                               Row(
                                 children: [
                                   OutlinedButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      DatabaseOperations databaseop =
+                                          new DatabaseOperations();
+                                      databaseop.addToFavourities(
+                                          widget.package_details);
+                                      snackBar(context, 'Added to favourities');
+                                    },
                                     child: Icon(Icons.favorite_outlined,
                                         color: Colors.red),
                                     style: OutlinedButton.styleFrom(
