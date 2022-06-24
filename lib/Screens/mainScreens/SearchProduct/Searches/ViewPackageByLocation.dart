@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/property_card.dart';
 
-class ViewPackageByName extends StatelessWidget {
+class ViewPackageByLocation extends StatelessWidget {
   String PackageName;
   int length = 0;
-  ViewPackageByName({required this.PackageName});
+  ViewPackageByLocation({required this.PackageName});
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,9 @@ class ViewPackageByName extends StatelessWidget {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('AllPackages')
-                    .where('package', isGreaterThanOrEqualTo: PackageName)
-                    .where('package', isLessThanOrEqualTo: "$PackageName\uf7ff")
+                    .where('location', isGreaterThanOrEqualTo: PackageName)
+                    .where('location',
+                        isLessThanOrEqualTo: "$PackageName\uf7ff")
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -79,24 +80,3 @@ class ViewPackageByName extends StatelessWidget {
     );
   }
 }
-
-//StreamBuilder<QuerySnapshot>(
-//   stream: FirebaseFirestore.instance
-//       .collection('AllPackages')
-//       .snapshots(),
-//   builder: (context, snapshot) {
-//     if (!snapshot.hasData) {
-//       return Center(child: CircularProgressIndicator());
-//     }
-//     return ListView.builder(
-//       itemCount: snapshot.data!.docs.length,
-//       physics: NeverScrollableScrollPhysics(),
-//       shrinkWrap: true,
-//       itemBuilder: (context, index) {
-//         DocumentSnapshot data = snapshot.data!.docs[index];
-//         var temp = snapshot.data!.docs[index].data() as Map;
-//         return productCard2(temp);
-//       },
-//     );
-//   },
-// )

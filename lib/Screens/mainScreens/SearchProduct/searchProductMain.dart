@@ -48,7 +48,7 @@ class _SearchProductState extends State<SearchProduct> {
                         flex: 3,
                         child: InputWidget(
                           controller: _packageSearchedDetailController,
-                          hintText: "Find by package price",
+                          hintText: "Find by package name",
                           prefixIcon: Icons.search,
                         ),
                       ),

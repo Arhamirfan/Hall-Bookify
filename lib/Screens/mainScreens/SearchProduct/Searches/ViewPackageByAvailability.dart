@@ -2,16 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Controller/property_card.dart';
 
-class ViewPackageByName extends StatelessWidget {
-  String PackageName;
+class ViewPackageByAvailability extends StatelessWidget {
   int length = 0;
-  ViewPackageByName({required this.PackageName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Searched - " + PackageName),
+        title: Text("Available Packages"),
         centerTitle: true,
         backgroundColor: Colors.purpleAccent,
       ),
@@ -51,8 +49,7 @@ class ViewPackageByName extends StatelessWidget {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('AllPackages')
-                    .where('package', isGreaterThanOrEqualTo: PackageName)
-                    .where('package', isLessThanOrEqualTo: "$PackageName\uf7ff")
+                    .where('package_availibility', isEqualTo: true)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
