@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Models/FireBaseData/PackagesData.dart';
 import 'package:hall_bookify/Models/FireBaseData/ProfileDatabase.dart';
-import 'package:hall_bookify/Screens/mainScreens/Cart/Cart.dart';
+import 'package:hall_bookify/Screens/mainScreens/Cart/Cartupdated.dart';
 import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/MainDrawer.dart';
 import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
 import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/ManagementMainActivity.dart';
@@ -116,7 +116,7 @@ class _MainMenuState extends State<MainMenu> {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return new Cart();
+                    return new CartUpdated();
                   },
                 ));
               },

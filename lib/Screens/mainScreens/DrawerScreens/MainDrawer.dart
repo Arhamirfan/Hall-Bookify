@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
-import 'package:hall_bookify/Screens/mainScreens/Cart/Cart.dart';
+import 'package:hall_bookify/Screens/mainScreens/Cart/Cartupdated.dart';
 import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/orderStatus.dart';
 import 'package:hall_bookify/Screens/mainScreens/Favourites/FavouriteProducts.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../Models/sharedPreference/sharedPreference.dart';
 
 class MainDrawer extends StatelessWidget {
   var uid;
@@ -152,7 +150,7 @@ class MainDrawer extends StatelessWidget {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
-                                  return Cart();
+                                  return CartUpdated();
                                 },
                               ));
                             }),
@@ -191,10 +189,6 @@ class MainDrawer extends StatelessWidget {
                                 await SharedPreferences.getInstance();
                             sharedpreference.remove('PHONE');
 
-                            //empty cart..
-                            sharedPreferenceForCart sharedprefer =
-                                new sharedPreferenceForCart();
-                            sharedprefer.resetCounter();
                             var collection =
                                 FirebaseFirestore.instance.collection('Cart');
                             var snapshots = await collection.get();

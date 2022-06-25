@@ -8,7 +8,6 @@ import 'package:hall_bookify/Models/DatabaseOperations.dart';
 import 'package:intl/intl.dart';
 
 import '../../../Models/DatabaseCollections.dart';
-import '../../../Models/sharedPreference/sharedPreference.dart';
 import '../../../Widgets/progressDialog.dart';
 
 class View_Package extends StatefulWidget {
@@ -26,7 +25,6 @@ class _View_PackageState extends State<View_Package> {
   TextEditingController _bookingtimeController = new TextEditingController();
   TextEditingController _totalpersonController = new TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
   String buyer_uid = "", seller_uid = "";
   DatabaseOperations dboperation = new DatabaseOperations();
 
@@ -35,15 +33,6 @@ class _View_PackageState extends State<View_Package> {
     setState(() {
       buyer_uid = user.uid;
     });
-  }
-
-  void getCartCount() async {
-    int cartno = await sharedpreference.getintfromSharedPreference();
-    setState(() {
-      cartnumber = cartno;
-    });
-    //sharedpref.resetCounter();
-    print('Shared Preference cart count:' + cartnumber.toString());
   }
 
   void getSellerData() async {
@@ -55,7 +44,6 @@ class _View_PackageState extends State<View_Package> {
   void initState() {
     super.initState();
     fetchinfo();
-    getCartCount();
     getSellerData();
     for (int i = 0; i < widget.package_details['price'].length; i++) {
       int value = int.parse(widget.package_details['price'][i]);

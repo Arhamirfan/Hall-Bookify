@@ -27,7 +27,6 @@ class _orderStatusState extends State<orderStatus> {
       address = "",
       city = "",
       cnic = "";
-  sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
   sharedPreferenceForReceipt sharedpreferenceforreceipt =
       new sharedPreferenceForReceipt();
   DatabaseOperations dboperation = new DatabaseOperations();
@@ -48,15 +47,6 @@ class _orderStatusState extends State<orderStatus> {
       print("Error reteriving data from current user data");
     }
     print(firstname + lastname + phoneno + address + city);
-  }
-
-  void getCartCount() async {
-    int cartno = await sharedpreference.getintfromSharedPreference();
-    setState(() {
-      cartnumber = cartno;
-    });
-    //sharedpref.resetCounter();
-    print('Shared Preference cart count:' + cartnumber.toString());
   }
 
   void receiptreset() async {
@@ -109,7 +99,6 @@ class _orderStatusState extends State<orderStatus> {
   @override
   void initState() {
     fetchUserInfo();
-    getCartCount();
     getReceiptCount();
     getReceiptData();
     super.initState();

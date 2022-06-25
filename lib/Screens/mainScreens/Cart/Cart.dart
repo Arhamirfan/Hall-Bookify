@@ -58,7 +58,7 @@ class _CartState extends State<Cart> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Cart')
-                      .where('buyer uid', isEqualTo: buyer_uid)
+                      .where('buyeruid', isEqualTo: buyer_uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -80,7 +80,7 @@ class _CartState extends State<Cart> {
                         if (temp.length > 0) {
                           CartData = temp;
                         }
-                        print(temp['buyer uid']);
+                        print(temp['buyeruid']);
                         print(temp['Package']);
                         return Container(
                           child: Padding(
@@ -146,21 +146,17 @@ class _CartState extends State<Cart> {
                                               ),
                                               color: Colors.red,
                                               onPressed: () async {
-                                                showLoaderDialog(context);
-                                                sharedPreferenceForCart
-                                                    sharedpreference =
-                                                    new sharedPreferenceForCart();
-                                                sharedpreference.resetCounter();
-                                                var collection =
-                                                    FirebaseFirestore.instance
-                                                        .collection('Cart');
-                                                var snapshots =
-                                                    await collection.get();
-                                                for (var doc
-                                                    in snapshots.docs) {
-                                                  await doc.reference.delete();
-                                                }
-                                                Navigator.pop(context);
+                                                // showLoaderDialog(context);
+                                                // var collection =
+                                                //     FirebaseFirestore.instance
+                                                //         .collection('Cart');
+                                                // var snapshots =
+                                                //     await collection.get();
+                                                // for (var doc
+                                                //     in snapshots.docs) {
+                                                //   await doc.reference.delete();
+                                                // }
+                                                // Navigator.pop(context);
                                               },
                                             ),
                                           ),
@@ -271,9 +267,10 @@ class _CartState extends State<Cart> {
 //
 //
 //                     deleting package from cart after booking.. add receipt to db and review after it.
-                        sharedPreferenceForCart sharedpreference =
-                            new sharedPreferenceForCart();
-                        sharedpreference.resetCounter();
+
+//                         sharedPreferenceForCart sharedpreference =
+//                             new sharedPreferenceForCart();
+//                         sharedpreference.resetCounter();
                         var collection =
                             FirebaseFirestore.instance.collection('Cart');
                         var snapshots = await collection.get();
