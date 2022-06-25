@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:hall_bookify/Constants.dart';
-import 'package:hall_bookify/Models/DatabaseCollections.dart';
 import 'package:hall_bookify/Models/DatabaseOperations.dart';
+import 'package:intl/intl.dart';
 
+import '../../../Models/DatabaseCollections.dart';
 import '../../../Models/sharedPreference/sharedPreference.dart';
 import '../../../Widgets/progressDialog.dart';
 
@@ -20,6 +22,9 @@ class View_Package extends StatefulWidget {
 class _View_PackageState extends State<View_Package> {
   int total = 0, cartnumber = 0;
   double creatorFee = 0, subTotal = 0;
+  late DateTime Bookingdate;
+  TextEditingController _bookingtimeController = new TextEditingController();
+  TextEditingController _totalpersonController = new TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
   String buyer_uid = "", seller_uid = "";
@@ -122,7 +127,7 @@ class _View_PackageState extends State<View_Package> {
                                       DatabaseOperations databaseop =
                                           new DatabaseOperations();
                                       databaseop.addToFavourities(
-                                          widget.package_details);
+                                          buyer_uid, widget.package_details);
                                       snackBar(context, 'Added to favourities');
                                     },
                                     child: Icon(Icons.favorite_outlined,
@@ -230,25 +235,10 @@ class _View_PackageState extends State<View_Package> {
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: ElevatedButton.icon(
                       onPressed: () async {
-                        print('buyer id:  ' + buyer_uid);
-                        print('seller id: ' + seller_uid);
                         if (buyer_uid != seller_uid) {
                           if (widget.package_details['package_availibility'] !=
                               false) {
-                            showLoaderDialog(context);
-                            DatabaseService dbs =
-                                new DatabaseService(uid: buyer_uid);
-
-                            dbs.addToCartPackage(
-                                buyer_uid,
-                                widget.package_details,
-                                total.toString(),
-                                creatorFee.toString(),
-                                subTotal.toString());
-                            Navigator.pop(context);
-                            setState(() {
-                              cartnumber = 1;
-                            });
+                            openBookingDialog();
                           }
                         }
                       },
@@ -262,7 +252,7 @@ class _View_PackageState extends State<View_Package> {
                               : cartnumber == 1
                                   ? Text('Cannot Add More To Cart',
                                       style: kmediumwhiteText)
-                                  : Text('Add To Cart',
+                                  : Text('Add Booking Details',
                                       style: kmediumwhiteText),
                       style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
@@ -283,6 +273,163 @@ class _View_PackageState extends State<View_Package> {
       ),
     );
   }
+
+  Future openBookingDialog() => showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 15),
+                    Text('Booking Details', style: klargeblackboldText),
+                    SizedBox(height: 30),
+                    Container(
+                      height: MediaQuery.of(context).size.height * .3,
+                      child: ListView(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Booking time span',
+                                  style: kmediumblackboldText),
+                              TextField(
+                                controller: _bookingtimeController,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText:
+                                        'Afternoon(2pm - 4pm) / Evening(7pm - 9pm)'),
+                              ),
+                              Text('Booking Time', style: kmediumblackboldText),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Container(
+                                  color: Colors.blue,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Center(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(10),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '${DateFormat.MMMM().format(DateTime.now())}',
+                                                    style: kmediumwhiteText,
+                                                  ),
+                                                  Text('${DateTime.now().day}',
+                                                      style:
+                                                          kmediumwhiteboldText),
+                                                ],
+                                              )),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          DatePicker.showDatePicker(context,
+                                              showTitleActions: true,
+                                              minTime: DateTime.now(),
+                                              maxTime: DateTime.now()
+                                                  .add(Duration(days: 31)),
+                                              onConfirm: (days) {
+                                            setState(() {
+                                              Bookingdate = days;
+                                            });
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Text('No of people', style: kmediumblackboldText),
+                              TextField(
+                                controller: _totalpersonController,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'eg. 500'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RaisedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.purpleAccent,
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              showLoaderDialog(context);
+                              DatabaseService dbs =
+                                  new DatabaseService(uid: buyer_uid);
+
+                              dbs.addToReview(
+                                  buyer_uid,
+                                  widget.package_details,
+                                  total.toString(),
+                                  creatorFee.toString(),
+                                  subTotal.toString(),
+                                  Bookingdate,
+                                  _bookingtimeController.text,
+                                  _totalpersonController.text);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              snackBar(context,
+                                  "Package added for review. Package will be added to cart once provider approve");
+
+                              setState(() {
+                                cartnumber = 1;
+                              });
+                            },
+                            child: Text(
+                              "Book Package",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.purpleAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      });
 }
 
 Swiper ImageSlider(BuildContext context, List<dynamic> images) {

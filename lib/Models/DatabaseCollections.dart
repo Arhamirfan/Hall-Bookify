@@ -37,6 +37,9 @@ class DatabaseService {
   final CollectionReference userCollection6 =
       FirebaseFirestore.instance.collection('Favourities');
 
+  final CollectionReference userCollection7 =
+      FirebaseFirestore.instance.collection('review');
+
   Future registerCustomer(
       String firstname,
       String lastname,
@@ -115,7 +118,7 @@ class DatabaseService {
     print('Total package price: ' + total.toString());
 
     await userCollection3.doc().set({
-      'package': packageName,
+      'package': packageName.toLowerCase(),
       'location': location,
       'services': names,
       'price': price,
@@ -149,32 +152,62 @@ class DatabaseService {
     _imgurl = imgDownloadURL;
   }
 
-  Future addToCartPackage(String buyer_uid, Map package, String total,
-      String creatorFee, String subTotal) async {
-    sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
-    int cart_no = await sharedpreference.getintfromSharedPreference();
-    if (cart_no < 1) {
-      print("--------Cart Details---------");
-      print("Buyer : " + buyer_uid);
-      print("Seller : " + package['uid']);
-      print("Sub total : " + subTotal);
+  Future addToReview(
+      String buyer_uid,
+      Map package,
+      String total,
+      String creatorFee,
+      String subTotal,
+      DateTime bookingDate,
+      String timespan,
+      String totalperson) async {
+    await userCollection7.doc().set({
+      'buyeruid': buyer_uid,
+      'selleruid': package['uid'],
+      'Package': package['package'],
+      'Location': package['location'],
+      'Services': package['services'],
+      'ServicesPrice': package['price'],
+      'Total': total,
+      'CreatorFee': creatorFee,
+      'SubTotal': subTotal,
+      'Date': bookingDate,
+      'timespan': timespan,
+      'persons': totalperson,
+      'status': 'pending'
+    });
+  }
 
-      await userCollection4.doc().set({
-        'buyer uid': buyer_uid,
-        'seller uid': package['uid'],
-        'Package': package['package'],
-        'Location': package['location'],
-        'Services': package['services'],
-        'Services Price': package['price'],
-        'Total': total,
-        'Creator Fee': creatorFee,
-        'Sub Total': subTotal
-      });
+  // Future addToCartPackage(String buyer_uid, Map package, String total,
+  //     String creatorFee, String subTotal) async {
+  //   sharedPreferenceForCart sharedpreference = new sharedPreferenceForCart();
+  //   int cart_no = await sharedpreference.getintfromSharedPreference();
+  //   if (cart_no < 1) {
+  //     print("--------Cart Details---------");
+  //     print("Buyer : " + buyer_uid);
+  //     print("Seller : " + package['uid']);
+  //     print("Sub total : " + subTotal);
+  //
+  //     await userCollection4.doc().set({
+  //       'buyer uid': buyer_uid,
+  //       'seller uid': package['uid'],
+  //       'Package': package['package'],
+  //       'Location': package['location'],
+  //       'Services': package['services'],
+  //       'Services Price': package['price'],
+  //       'Total': total,
+  //       'Creator Fee': creatorFee,
+  //       'Sub Total': subTotal
+  //     });
+  //
+  //     sharedpreference.incrementCounter();
+  //   } else {
+  //     print('Sorry cannot add more item to cart');
+  //   }
+  // }
 
-      sharedpreference.incrementCounter();
-    } else {
-      print('Sorry cannot add more item to cart');
-    }
+  Future ApprovedCartPackage(Map package) async {
+    await userCollection4.doc().set(package);
   }
 
   Future generateReceipt(

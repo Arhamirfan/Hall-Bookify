@@ -42,7 +42,7 @@ class productCard2 extends StatelessWidget {
                       height: 45.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: package_details['package_availibility']
+                        color: package_details['package_availability']
                                     .toString() ==
                                 "true"
                             ? Colors.purple
@@ -50,7 +50,7 @@ class productCard2 extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          package_details['package_availibility'].toString() ==
+                          package_details['package_availability'].toString() ==
                                   'true'
                               ? "Available"
                               : "Booked",
@@ -114,7 +114,7 @@ class productCard2 extends StatelessWidget {
                         width: 5.0,
                       ),
                       Text(
-                        package_details['package_availibility'].toString(),
+                        package_details['package_availability'].toString(),
                         style: TextStyle(
                           fontSize: 13.0,
                           color: Color(0xFF343434),

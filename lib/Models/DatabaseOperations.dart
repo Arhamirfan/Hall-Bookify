@@ -28,8 +28,32 @@ class DatabaseOperations {
   final CollectionReference userCollection6 =
       FirebaseFirestore.instance.collection('Favourities');
 
-  Future addToFavourities(Map package) async {
+  final CollectionReference userCollection7 =
+      FirebaseFirestore.instance.collection('review');
+
+  Future addToFavourities(String buyerID, Map package) async {
+    package['buyeruid'] = buyerID;
     return await userCollection6.doc().set(package);
+  }
+
+  Future deleteFavourities() async {
+    var collection = FirebaseFirestore.instance.collection('Favourities');
+    var snapshots = await collection.get();
+    for (var doc in snapshots.docs) {
+      await doc.reference.delete();
+    }
+  }
+
+  Future removeFromReview(String docsID) async {
+    await userCollection7
+        .doc(docsID)
+        .delete()
+        .then((_) => print('Deleted'))
+        .catchError((error) => print('Delete failed: $error'));
+  }
+
+  Future approveFromReview(String docsID) async {
+    await userCollection7.doc(docsID).update({'status': 'approved'});
   }
 
   Future getBuyerData(String buyerUid) async {

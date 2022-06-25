@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Models/DatabaseCollections.dart';
@@ -21,9 +22,20 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
   int cart_size = 0;
   late Map CartData;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String buyer_uid = "", seller_uid = "";
+
+  fetchinfo() async {
+    final User user = await _auth.currentUser!;
+    setState(() {
+      buyer_uid = user.uid;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchinfo();
   }
 
   @override
@@ -44,8 +56,10 @@ class _CartState extends State<Cart> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection('Cart').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('Cart')
+                      .where('buyer uid', isEqualTo: buyer_uid)
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Container(

@@ -46,7 +46,7 @@ class _MainMenuState extends State<MainMenu> {
       HomePage(firstname: firstname),
       SearchProduct(),
       AddProduct(),
-      Favourite(),
+      Favourite(userid: uid),
       ManagementMainActivity()
     ];
   }
@@ -57,6 +57,7 @@ class _MainMenuState extends State<MainMenu> {
     dynamic userData = await DatabaseManager().getCurrentUserData(uid);
     if (userData != null) {
       setState(() {
+        uid = user.uid;
         firstname = userData[0];
         lastname = userData[1];
         phoneno = userData[2];

@@ -5,7 +5,7 @@ import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/Cart/Cart.dart';
 import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/orderStatus.dart';
-import 'package:hall_bookify/Screens/mainScreens/Favourites/favouritePage.dart';
+import 'package:hall_bookify/Screens/mainScreens/Favourites/FavouriteProducts.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -138,7 +138,7 @@ class MainDrawer extends StatelessWidget {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
-                                  return Favourite();
+                                  return FavouriteProducts(loggedinUser: uid);
                                 },
                               ));
                             }),
