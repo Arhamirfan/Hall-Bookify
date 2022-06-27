@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomerSupport extends StatelessWidget {
+  TextEditingController _namecontroller = new TextEditingController();
+  TextEditingController _emailcontroller = new TextEditingController();
+  TextEditingController _subjectcontroller = new TextEditingController();
+  TextEditingController _messagecontroller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +92,53 @@ class CustomerSupport extends StatelessWidget {
                           ],
                         )
                       ],
+                    ),
+                    ExpansionTile(
+                      title:
+                          Text('Customer Support', style: kmediumblackboldText),
+                      subtitle: Text(
+                          'Resolve your dispute and query by contacting us.'),
+                      trailing: Icon(Icons.arrow_downward),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Wrap(
+                            children: [
+                              Text('Subject', style: klargeblackboldText),
+                              TextField(
+                                controller: _subjectcontroller,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Subject',
+                                ),
+                                onChanged: (text) {
+                                  //fullName = text;
+                                },
+                              ),
+                              Text('Message', style: klargeblackboldText),
+                              TextField(
+                                controller: _messagecontroller,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Message',
+                                ),
+                                onChanged: (text) {
+                                  //fullName = text;
+                                },
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  _launchEmail(_subjectcontroller.text,
+                                      _messagecontroller.text);
+                                },
+                                child: Text('Submit Query',
+                                    style: kmediumwhiteText),
+                                color: Colors.purpleAccent,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
                     )
                   ],
                 )
@@ -94,5 +146,36 @@ class CustomerSupport extends StatelessWidget {
         ),
       ),
     );
+  }
+  //
+  // void _launchURL(String subject) async {
+  //   String? encodeQueryParameters(Map<String, String> params) {
+  //     return params.entries
+  //         .map((e) =>
+  //             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+  //         .join('&');
+  //   }
+  //
+  //   final Uri params = Uri(
+  //     scheme: 'mailto',
+  //     path: 'arhamirfan18@gmail.com',
+  //     query: encodeQueryParameters(<String, String>{'subject': '$subject'}),
+  //   );
+  //   String url = params.toString();
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     print('Could not launch $url');
+  //   }
+  // }
+
+  _launchEmail(String subject, String message) async {
+    String uri =
+        'mailto:arhamirfan18@gmail.com?subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(message)}';
+    if (await canLaunch(uri)) {
+      await launch(uri);
+    } else {
+      print("No email client found");
+    }
   }
 }
