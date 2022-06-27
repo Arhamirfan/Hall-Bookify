@@ -224,8 +224,8 @@ class DatabaseService {
     print(' package name' + package['Package']);
     print(' location' + package['Location']);
     print(' total' + package['Total']);
-    print(' creator fee' + package['Creator Fee']);
-    print('subtotal: ' + package['Sub Total']);
+    print(' creator fee' + package['CreatorFee']);
+    print('subtotal: ' + package['SubTotal']);
     await userCollection5.doc().set({
       'invoicenumber': invoiceNumber,
       'selleruid': seller['userid'],
@@ -237,8 +237,8 @@ class DatabaseService {
       'package': package['Package'],
       'location': package['Location'],
       'packageprice': package['Total'],
-      'creatorfee': package['Creator Fee'],
-      'total': package['Sub Total'],
+      'creatorfee': package['CreatorFee'],
+      'total': package['SubTotal'],
       'status': status
     }).whenComplete(() {
       print('-------RECEIPT Confirmation-------');
@@ -248,8 +248,8 @@ class DatabaseService {
       print(' package name' + package['Package']);
       print(' location' + package['Location']);
       print(' total' + package['Total']);
-      print(' creator fee' + package['Creator Fee']);
-      print('subtotal: ' + package['Sub Total']);
+      print(' creator fee' + package['CreatorFee']);
+      print('subtotal: ' + package['SubTotal']);
     });
   }
 }

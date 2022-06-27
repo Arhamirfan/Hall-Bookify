@@ -29,6 +29,8 @@ class _orderStatusState extends State<orderStatus> {
       cnic = "";
   sharedPreferenceForReceipt sharedpreferenceforreceipt =
       new sharedPreferenceForReceipt();
+  sharedPreferenceForCart sharedpreferenceforcart =
+      new sharedPreferenceForCart();
   DatabaseOperations dboperation = new DatabaseOperations();
 
   fetchUserInfo() async {
@@ -49,9 +51,12 @@ class _orderStatusState extends State<orderStatus> {
     print(firstname + lastname + phoneno + address + city);
   }
 
-  void receiptreset() async {
-    await sharedpreferenceforreceipt.resetCounter();
-    print('Shared Preference receipt value:' + receiptnumber.toString());
+  void getCartCount() async {
+    int cartno = await sharedpreferenceforcart.getintfromSharedPreference();
+    setState(() {
+      cartnumber = cartno;
+    });
+    print('Shared Preference cart value:' + cartnumber.toString());
   }
 
   void getReceiptCount() async {
@@ -99,6 +104,7 @@ class _orderStatusState extends State<orderStatus> {
   @override
   void initState() {
     fetchUserInfo();
+    getCartCount();
     getReceiptCount();
     getReceiptData();
     super.initState();
@@ -149,11 +155,15 @@ class _orderStatusState extends State<orderStatus> {
                             Divider(thickness: 3, color: Colors.purpleAccent)),
                     SizedBox(height: 30),
                     ListTile(
-                      leading: cartnumber != 1
+                      leading: cartnumber == 0
                           ? Icon(Icons.check_circle_outline, color: Colors.grey)
                           : Icon(Icons.check_circle,
                               color: Colors.purpleAccent),
-                      title: Text('Cart Status', style: klargeblackText),
+                      title: Text(
+                          cartnumber == 0
+                              ? 'Cart is Empty'
+                              : 'Package available in Cart',
+                          style: klargeblackText),
                     ),
                     SizedBox(height: 20),
                     ListTile(
@@ -161,7 +171,11 @@ class _orderStatusState extends State<orderStatus> {
                           ? Icon(Icons.check_circle_outline, color: Colors.grey)
                           : Icon(Icons.check_circle,
                               color: Colors.purpleAccent),
-                      title: Text('Order Booked', style: klargeblackText),
+                      title: Text(
+                          receiptnumber == 0
+                              ? 'Order receipt not generated'
+                              : 'Order Booked',
+                          style: klargeblackText),
                     ),
                     SizedBox(height: 20),
                     ListTile(
@@ -169,7 +183,11 @@ class _orderStatusState extends State<orderStatus> {
                           ? Icon(Icons.check_circle_outline, color: Colors.grey)
                           : Icon(Icons.check_circle,
                               color: Colors.purpleAccent),
-                      title: Text('Payment Status', style: klargeblackText),
+                      title: Text(
+                          payment_status == 'pending'
+                              ? 'Payment pending'
+                              : 'Payment completed',
+                          style: klargeblackText),
                     ),
                     SizedBox(height: 40),
                     Container(
@@ -183,6 +201,7 @@ class _orderStatusState extends State<orderStatus> {
                             if (payment_status == 'Paid') {
                               show();
                               await sharedpreferenceforreceipt.resetCounter();
+                              Navigator.pop(context);
                             } else {
                               snackBar(context, 'Complete order payment first');
                             }

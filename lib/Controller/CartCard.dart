@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hall_bookify/Models/DatabaseOperations.dart';
@@ -103,7 +102,10 @@ class CartCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        //remove from card
+                        dboperations.removeFromCart(docsID);
+                      },
                       child: Text('Remove'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,
@@ -156,7 +158,7 @@ class CartCard extends StatelessWidget {
                                 date: date,
                                 dueDate: dueDate,
                                 description:
-                                    'The package ${CartData['Package']} is booked by $buyerFullName. This invoice will be shown to $sellerFullName with the payment status as verified once you pay through ETH by metamask from our website.',
+                                    'The package ${CartData['Package']} is booked by $buyerFullName. This invoice will be shown to $sellerFullName with the payment status as verified once you pay through ETH by metamask from our website(https://arhamirfan.github.io/Hall-Bookify-Payment-Web3/).',
                                 number: invoiceNumber),
                             items: [
                               InvoiceItem(
@@ -185,8 +187,7 @@ class CartCard extends StatelessWidget {
                               CartData);
 
                           // get by package name and update all_package data to booked
-                          dboperation
-                              .getAndUpdatePackageData(CartData['Package']);
+                          //dboperation.getAndUpdatePackageData(CartData['Package']);
 
                           //sharedpreference for receipt to show status order booked.. remove in orderstatus file when receipt status is paid.
                           sharedPreferenceForReceipt spr =
@@ -201,17 +202,8 @@ class CartCard extends StatelessWidget {
 //
 //
 //
-//                     deleting package from cart after booking.. add receipt to db and review after it.
 
-//                         sharedPreferenceForCart sharedpreference =
-//                             new sharedPreferenceForCart();
-//                         sharedpreference.resetCounter();
-                          var collection =
-                              FirebaseFirestore.instance.collection('Cart');
-                          var snapshots = await collection.get();
-                          for (var doc in snapshots.docs) {
-                            await doc.reference.delete();
-                          }
+                          dboperations.removeFromCart(docsID);
                           Navigator.pop(context);
                         } else {
                           print(

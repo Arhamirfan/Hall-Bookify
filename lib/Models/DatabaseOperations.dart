@@ -64,6 +64,14 @@ class DatabaseOperations {
     await userCollection3.doc(docsID).update({'package_availability': false});
   }
 
+  Future removeFromCart(String docsID) async {
+    await userCollection4
+        .doc(docsID)
+        .delete()
+        .then((_) => print('Deleted'))
+        .catchError((error) => print('Delete failed: $error'));
+  }
+
   Future getBuyerData(String buyerUid) async {
     //print('buyer data');
     await userCollection1
@@ -90,17 +98,17 @@ class DatabaseOperations {
     //print(sellerData);
   }
 
-  Future getAndUpdatePackageData(String packageName) async {
-    await userCollection3
-        .where('package', isEqualTo: packageName)
-        .get()
-        .then((QuerySnapshot querysnapshot) {
-      querysnapshot.docs.forEach((element) {
-        packageData = element.data() as Map;
-        userCollection3.doc(element.id).update({'package_availibility': false});
-      });
-    });
-  }
+  // Future getAndUpdatePackageData(String packageName) async {
+  //   await userCollection3
+  //       .where('package', isEqualTo: packageName)
+  //       .get()
+  //       .then((QuerySnapshot querysnapshot) {
+  //     querysnapshot.docs.forEach((element) {
+  //       packageData = element.data() as Map;
+  //       userCollection3.doc(element.id).update({'package_availibility': false});
+  //     });
+  //   });
+  // }
 
   Future getReceiptData(String invoiceNumber) async {
     //print('seller Data');

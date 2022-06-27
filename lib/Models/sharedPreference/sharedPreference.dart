@@ -29,6 +29,41 @@ class sharedPreference {
   }
 }
 
+class sharedPreferenceForCart {
+  Future<void> incrementCounter() async {
+    final pref = await SharedPreferences.getInstance();
+    int lastnumber = await getintfromSharedPreference();
+    int currentNumber = ++lastnumber;
+    await pref.setInt('cartstatus', currentNumber);
+  }
+
+  Future<void> decrementCounter() async {
+    final pref = await SharedPreferences.getInstance();
+    int lastnumber = await getintfromSharedPreference();
+    int currentNumber = --lastnumber;
+    await pref.setInt('cartstatus', currentNumber);
+  }
+
+  Future<void> setValueForCart(int invoicenumber) async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setInt('cartstatus', invoicenumber);
+  }
+
+  Future<int> getintfromSharedPreference() async {
+    final pref = await SharedPreferences.getInstance();
+    final startupNumber = pref.getInt('cartstatus');
+    if (startupNumber == null) {
+      return 0;
+    }
+    return startupNumber;
+  }
+
+  Future<void> resetCounter() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.setInt('cartstatus', 0);
+  }
+}
+
 class sharedPreferenceForReceipt {
   Future<void> incrementCounter() async {
     final pref = await SharedPreferences.getInstance();

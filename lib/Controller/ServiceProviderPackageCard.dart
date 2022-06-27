@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:hall_bookify/Models/DatabaseOperations.dart';
 
 import '../Models/DatabaseCollections.dart';
+import '../Models/sharedPreference/sharedPreference.dart';
 
 class packageCard extends StatelessWidget {
   final Map package_details;
@@ -106,12 +107,15 @@ class packageCard extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         DatabaseService dbs = new DatabaseService(
                             uid: package_details['buyeruid']);
                         dboperations.approveFromReview(docsID);
                         dbs.ApprovedCartPackage(package_details);
                         dboperations.removeFromReview(docsID);
+                        sharedPreferenceForCart spc =
+                            new sharedPreferenceForCart();
+                        await spc.incrementCounter();
                       },
                       child: Text('Approve'),
                       style: ElevatedButton.styleFrom(
