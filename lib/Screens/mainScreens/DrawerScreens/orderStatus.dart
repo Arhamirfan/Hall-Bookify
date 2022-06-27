@@ -201,7 +201,6 @@ class _orderStatusState extends State<orderStatus> {
                             if (payment_status == 'Paid') {
                               show();
                               await sharedpreferenceforreceipt.resetCounter();
-                              Navigator.pop(context);
                             } else {
                               snackBar(context, 'Complete order payment first');
                             }

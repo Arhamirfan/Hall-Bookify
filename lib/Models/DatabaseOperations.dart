@@ -72,6 +72,10 @@ class DatabaseOperations {
         .catchError((error) => print('Delete failed: $error'));
   }
 
+  Future updateAddToCart(String docsID) async {
+    await userCollection4.doc(docsID).update({'addtocart': false});
+  }
+
   Future getBuyerData(String buyerUid) async {
     //print('buyer data');
     await userCollection1
