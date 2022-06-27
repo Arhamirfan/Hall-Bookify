@@ -56,6 +56,14 @@ class DatabaseOperations {
     await userCollection7.doc(docsID).update({'status': 'approved'});
   }
 
+  Future resumeService(String docsID) async {
+    await userCollection3.doc(docsID).update({'package_availability': true});
+  }
+
+  Future stopService(String docsID) async {
+    await userCollection3.doc(docsID).update({'package_availability': false});
+  }
+
   Future getBuyerData(String buyerUid) async {
     //print('buyer data');
     await userCollection1
