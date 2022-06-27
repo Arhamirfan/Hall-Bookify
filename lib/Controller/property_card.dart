@@ -53,7 +53,7 @@ class productCard2 extends StatelessWidget {
                           package_details['package_availability'].toString() ==
                                   'true'
                               ? "Available"
-                              : "Booked",
+                              : "Unavailable",
                           style: TextStyle(
                             fontSize: 8.0,
                             color: Colors.white,

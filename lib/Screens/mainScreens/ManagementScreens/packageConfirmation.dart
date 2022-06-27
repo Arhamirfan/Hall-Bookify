@@ -68,6 +68,7 @@ class PackageConfirmation extends StatelessWidget {
                       length = snapshot.data!.docs.length;
                       print('Length of Search Packages : ' + length.toString());
                       print("document id: " + id);
+
                       return packageCard(id, temp);
                     },
                   );

@@ -66,7 +66,7 @@ class _AddProductState extends State<AddProduct> {
                   height: 40,
                 ),
                 Text('Number of Services added : ${servicesTask.length}' +
-                    "\n (Long Press to remove item)"),
+                    "\n (Long Press to remove item)\n\nHow to upload package:\n1. Click on add service to add service of package\n2. Add package name and location\n3. Click on upload package and confirm to upload"),
                 SizedBox(height: 20),
                 servicesTask.isEmpty
                     ? Padding(

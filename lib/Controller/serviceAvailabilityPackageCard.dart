@@ -39,14 +39,14 @@ class AvailabilitypackageCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        package_details['Package'],
+                        package_details['package'],
                         style: TextStyle(
                           fontSize: 17.0,
                         ),
                       ),
                     ),
                     Text(
-                      'Total: \$ ${package_details['Total']}',
+                      'Total: \$ ${package_details['totalprice']}',
                       style: TextStyle(
                         fontSize: 17.0,
                         color: Colors.blue,
@@ -58,7 +58,7 @@ class AvailabilitypackageCard extends StatelessWidget {
                   height: 5.0,
                 ),
                 Text(
-                  "Buyer: ${package_details['buyeruid']}",
+                  "Supplier: ${package_details['uid']}",
                   style: TextStyle(
                     fontSize: 13.0,
                     color: Color(0xFF343434),
@@ -78,7 +78,7 @@ class AvailabilitypackageCard extends StatelessWidget {
                       width: 5.0,
                     ),
                     Text(
-                      package_details['status'].toString(),
+                      package_details['package_availability'].toString(),
                       style: TextStyle(
                         fontSize: 13.0,
                         color: Color(0xFF343434),

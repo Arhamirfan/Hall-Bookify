@@ -68,6 +68,14 @@ class ProfileManagement extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black54,
+                      )),
                   Text(
                     "Edit Profile",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),

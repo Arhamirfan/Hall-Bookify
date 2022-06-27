@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/PackageAvailability.dart';
 import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/customerSupport.dart';
 import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/packageConfirmation.dart';
 
@@ -138,15 +139,10 @@ class _ManagementMainActivityState extends State<ManagementMainActivity> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // Navigator.push(context, MaterialPageRoute(
-                                //   builder: (context) {
-                                //     return new PackageConfirmation();
-                                //   },
-                                // ));
                                 print(loggedinUser);
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) {
-                                    return new PackageConfirmation(
+                                    return new PackageAvailability(
                                         logedinID: loggedinUser);
                                   },
                                 ));
@@ -243,7 +239,7 @@ class _ManagementMainActivityState extends State<ManagementMainActivity> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Customer Support",
+                                          "FAQ",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20.0,

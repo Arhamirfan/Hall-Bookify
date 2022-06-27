@@ -1,11 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hall_bookify/Constants.dart';
 import 'package:hall_bookify/Screens/loginScreens/SplashScreen.dart';
 import 'package:hall_bookify/Screens/loginScreens/getStartedScreen.dart';
 import 'package:hall_bookify/Screens/mainScreens/Cart/Cartupdated.dart';
+import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/Settings.dart';
 import 'package:hall_bookify/Screens/mainScreens/DrawerScreens/orderStatus.dart';
 import 'package:hall_bookify/Screens/mainScreens/Favourites/FavouriteProducts.dart';
+import 'package:hall_bookify/Screens/mainScreens/ManagementScreens/customerSupport.dart';
 import 'package:hall_bookify/Screens/mainScreens/profileManagement.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -175,11 +176,32 @@ class MainDrawer extends StatelessWidget {
                               'Help Center',
                               style: kmediumblackText,
                             ),
-                            onTap: () {}),
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return CustomerSupport();
+                                },
+                              ));
+                            }),
                         SizedBox(height: 20),
-                        Text(
-                          'Settings',
-                          style: kmediumblackText,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return SettingsScreen(
+                                    firstname: firstname,
+                                    lastname: lastname,
+                                    phoneno: phoneno,
+                                    address: address,
+                                    city: city,
+                                    uid: uid);
+                              },
+                            ));
+                          },
+                          child: Text(
+                            'Settings',
+                            style: kmediumblackText,
+                          ),
                         ),
                         SizedBox(height: 20),
                         GestureDetector(
@@ -189,12 +211,13 @@ class MainDrawer extends StatelessWidget {
                                 await SharedPreferences.getInstance();
                             sharedpreference.remove('PHONE');
 
-                            var collection =
-                                FirebaseFirestore.instance.collection('Cart');
-                            var snapshots = await collection.get();
-                            for (var doc in snapshots.docs) {
-                              await doc.reference.delete();
-                            }
+                            //no need to delete cart as code is updated and not showed to other user
+                            // var collection =
+                            //     FirebaseFirestore.instance.collection('Cart');
+                            // var snapshots = await collection.get();
+                            // for (var doc in snapshots.docs) {
+                            //   await doc.reference.delete();
+                            // }
                             //exit app previous screens
                             Navigator.popUntil(
                                 context, ModalRoute.withName(SplashScreen.id));

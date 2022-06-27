@@ -49,7 +49,7 @@ class ViewPackageByAvailability extends StatelessWidget {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('AllPackages')
-                    .where('package_availibility', isEqualTo: true)
+                    .where('package_availability', isEqualTo: true)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {

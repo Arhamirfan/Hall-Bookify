@@ -15,7 +15,7 @@ class _ServicesListState extends State<ServicesList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.35,
+        height: MediaQuery.of(context).size.height * 0.25,
         child: ListView.builder(
           itemBuilder: (context, index) {
             return ServicesTile(

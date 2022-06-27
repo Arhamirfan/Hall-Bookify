@@ -207,7 +207,10 @@ class DatabaseService {
   // }
 
   Future ApprovedCartPackage(Map package) async {
-    await userCollection4.doc().set(package);
+    print('adding to cart');
+    print(package);
+    print(package['Package']);
+    return await userCollection4.doc().set(package);
   }
 
   Future generateReceipt(

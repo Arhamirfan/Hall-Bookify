@@ -6,7 +6,7 @@ class CustomerSupport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Customer Support"),
+        title: Text("FAQ"),
         centerTitle: true,
         backgroundColor: Colors.purpleAccent,
       ),
